@@ -70,10 +70,8 @@ public class Parent {
                     default:
                         break;
                 }
-                
                 choiceEntry=-1;
             }
-
             choice.close();
 
             
