@@ -1,5 +1,10 @@
 package SysFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Hashtable;
 
 public class CommunicationHandler {
@@ -8,6 +13,8 @@ public class CommunicationHandler {
     public Hashtable<Integer,String> fsList;// F-server connection hash table
     public Hashtable<Integer,String> cList;// Clients connection hash table
     public Hashtable<Integer,String> ms;// M-server connection hash table
+    public static final int PORT_NUMBER_LISTEN=1895;
+    public Hashtable<Integer,PrintWriter> peers_listen;// Hash table that contains writeSockets
 
 
     public CommunicationHandler(Parent dad, int myID) {
@@ -16,6 +23,7 @@ public class CommunicationHandler {
         this.fsList=new Hashtable<Integer,String>();
         this.cList=new Hashtable<Integer,String>();
         this.ms=new Hashtable<Integer,String>();
+        this.peers_listen=new Hashtable<Integer,PrintWriter>();
     }
 
     public boolean estComm(String typeHost) {
@@ -55,8 +63,8 @@ public class CommunicationHandler {
         switch (typeHost) {
             case "M":
                 // F-server
-                for (int i=1;i<=3;i++){
-                    this.fsList.put(i, "dc1"+Integer.toString(i)+".utdallas.edu");
+                for (int i=11;i<=13;i++){
+                    this.fsList.put(i, "dc"+Integer.toString(i)+".utdallas.edu");
                 }
                 // Clients list
                 for (int i=1;i<=2;i++){
@@ -82,7 +90,23 @@ public class CommunicationHandler {
     }
 
     public void connect (int id, String hostname) {
-        System.out.println("Connection to hostId: "+id+", hostname: "+hostname);
+         //System.out.println("Connection to hostId: "+id+", hostname: "+hostname);
+
+        try {
+            Socket s = new Socket(hostname, CommunicationHandler.PORT_NUMBER_LISTEN);
+            BufferedReader readSocket = new BufferedReader (new InputStreamReader(s.getInputStream()));
+            PrintWriter writeSocket = new PrintWriter(s.getOutputStream(),true);
+
+            writeSocket.println(this.myID);// Sent my ID to my neighbor
+            String reply = readSocket.readLine();// Wait for its reply
+            System.out.println("Host "+Integer.toString(id)+" said "+reply);
+            this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's hosts list
+            // Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
+            // newClient.start();
+
+        } catch (IOException ex) {
+            
+        }
     }
 
     public boolean listeNewConnection() {
