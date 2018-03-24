@@ -22,24 +22,26 @@ public class Parent {
         } else if (args[1].equals("c")) {
 
             System.out.println("This is the client "+args[0]);
-
-            System.out.println("Enter one of the following commands:");
-            System.out.println("1 - Create");
-            System.out.println("2 - Read");
-            System.out.println("3 - Append");
-            System.out.println("4 - Exit");
             Scanner choice = new Scanner(System.in);
-            System.out.println();
-            
             int choiceEntry=-1;
 
             while (choiceEntry!=4) {
 
                 while (choiceEntry<1 || choiceEntry >4) {
 
-                    System.out.println("Enter \"1\", \"2\", \"3\"or \"4\"");
+                    System.out.println("Enter one of the following commands:");
+                    System.out.println("1 - Create");
+                    System.out.println("2 - Read");
+                    System.out.println("3 - Append");
+                    System.out.println("4 - Exit");
+                    System.out.println();
                     if (choice.hasNextInt()) {
+
                         choiceEntry=choice.nextInt();
+                        if (choiceEntry<1 || choiceEntry >4) {
+                            System.out.println("Invalidad input");
+                        }
+                        
                     }
                 }
 
