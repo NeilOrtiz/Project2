@@ -30,38 +30,46 @@ public class Parent {
             System.out.println("4 - Exit");
             Scanner choice = new Scanner(System.in);
             System.out.println();
-            System.out.println("Enter \"1\", \"2\", \"3\"or \"4\"");
-            System.out.println();
-            int choiceEntry=choice.nextInt();
+            
+            int choiceEntry=-1;
 
             while (choiceEntry!=4) {
 
-                if (choiceEntry<1 || choiceEntry >3) {
+                while (choiceEntry<1 || choiceEntry >4) {
 
                     System.out.println("Enter \"1\", \"2\", \"3\"or \"4\"");
-                    choiceEntry=choice.nextInt();
-
-                }
-                else if (choiceEntry==1) {
-                    System.out.println("Creating");
-                    System.out.println();
-                }
-                else if (choiceEntry==2) {
-                    System.out.println("Reading");
-                    System.out.println();
-                }
-                else if (choiceEntry==3){
-                    System.out.println("Appending");
-                    System.out.println();
-                }
-                else if (choiceEntry==4){
-                    System.out.println("Saliendo");
-                    choice.close();
-                    System.exit(1);
+                    if (choice.hasNextInt()) {
+                        choiceEntry=choice.nextInt();
+                    }
                 }
 
-                System.out.println("Enter \"1\", \"2\", \"3\"or \"4\"");
-                choiceEntry=choice.nextInt(); 
+                switch (choiceEntry) {
+                    case 1:
+                        System.out.println("Creating");
+                        System.out.println();
+                        break;
+
+                    case 2:
+                        System.out.println("Reading");
+                        System.out.println();
+                        break;
+
+                    case 3:
+                        System.out.println("Appending");
+                        System.out.println();
+                        break;
+
+                    case 4:
+                        System.out.println("Saliendo");
+                        choice.close();
+                        System.exit(1);
+                        break;
+                
+                    default:
+                        break;
+                }
+                
+                choiceEntry=-1;
             }
 
             choice.close();
