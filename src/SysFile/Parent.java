@@ -4,6 +4,12 @@ import java.util.Scanner;
 
 public class Parent {
 
+    public int myID;
+
+    public Parent(int myID) {
+        this.myID=myID;
+    }
+
     public static void main (String[] args) {
 
         if (args.length!=2) {
@@ -11,9 +17,19 @@ public class Parent {
 			System.exit(1);
         }
         
+        int myID=Integer.parseInt(args[0]);
+        String typeHost = args[1];
+        Parent dad = new Parent(myID);
+        CommunicationHandler cH=new CommunicationHandler(dad, myID);
+        
         if (args[1].equals("M")) {
 
             System.out.println("This is the M-server");
+
+            boolean success= cH.estComm(typeHost);
+            if (success==true) {
+                System.out.println("M-server Online");
+            }
 
         } else if (args[1].equals("s")) {
 

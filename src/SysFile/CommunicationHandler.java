@@ -11,6 +11,9 @@ public class CommunicationHandler {
 
     public boolean estComm(String typeHost) {
         boolean success=false;
+
+        System.out.println("Estableciendo communicaciones...");
+        success=true;
         //TODO: CH.estComm()
 
         return success;
