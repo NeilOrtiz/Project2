@@ -17,7 +17,14 @@ public class Receiver extends Thread {
 
     @Override
 	public void run() {
-        //TODO: Receiver.run()
+
+        while (dad.listening) {
+
+            //TODO: Receiver.run()
+
+        }
+
+        
 
     }
 

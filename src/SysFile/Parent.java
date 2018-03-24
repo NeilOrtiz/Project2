@@ -5,9 +5,11 @@ import java.util.Scanner;
 public class Parent {
 
     public int myID;
+    public boolean listening;
 
     public Parent(int myID) {
         this.myID=myID;
+        this.listening=true;
     }
 
     public static void main (String[] args) {
@@ -98,5 +100,9 @@ public class Parent {
 			System.exit(1);
         }
 
+    }
+
+    public void terminate() {
+        this.listening=false;
     }
 } 
