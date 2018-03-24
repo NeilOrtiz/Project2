@@ -101,12 +101,14 @@ public class CommunicationHandler {
             String reply = readSocket.readLine();// Wait for its reply
             System.out.println("Host "+Integer.toString(id)+" said "+reply);
             this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's hosts list
-            // Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
-            // newClient.start();
+            Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
+            newClient.start();
 
         } catch (IOException ex) {
+            System.out.println("Couldn't get I/O for the connection to " + hostname); 
             
         }
+        
     }
 
     public boolean listeNewConnection() {
