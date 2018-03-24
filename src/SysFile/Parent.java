@@ -56,12 +56,15 @@ public class Parent {
                 }
                 else if (choiceEntry==4){
                     System.out.println("Saliendo");
+                    choice.close();
                     System.exit(1);
                 }
 
                 System.out.println("Enter \"1\", \"2\", \"3\"or \"4\"");
                 choiceEntry=choice.nextInt(); 
             }
+
+            choice.close();
 
             
 
