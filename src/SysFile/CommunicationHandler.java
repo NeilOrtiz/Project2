@@ -23,13 +23,16 @@ public class CommunicationHandler {
 
         switch (typeHost) {
             case "M":
-            this.getList(typeHost);
-            this.connectAll(fsList);
-            this.connectAll(cList);
-
-            
-            // System.out.println("Estableciendo communicaciones...");
-            success=true;
+                this.getList(typeHost);
+                this.connectAll(fsList);
+                this.connectAll(cList);
+                boolean listSuccess = this.listeNewConnection();
+                if (listSuccess) {
+                    success=true;
+                } else {
+                    success=false;
+                }
+                
                 
                 break;
         
@@ -80,5 +83,15 @@ public class CommunicationHandler {
 
     public void connect (int id, String hostname) {
         System.out.println("Connection to hostId: "+id+", hostname: "+hostname);
+    }
+
+    public boolean listeNewConnection() {
+        boolean success=false;
+
+        System.out.println("Listening incoming connections...");
+        success=true;
+
+        return success;
+
     }
 }
