@@ -1,0 +1,38 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "command": "javac",
+            "type": "shell",
+            "label": "Build",
+            "identifier": "build-java",
+            "args": [
+                "-d",
+                ".\\bin",
+                ".\\src\\SysFile\\*.java"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "command": "jar",
+            "type": "shell",
+            "label": "JAR",
+            "identifier": "jar-java",
+            "options": {
+                "cwd": "${workspaceRoot}\\bin\\"
+            },
+            "args": [
+                "cvfm",
+                "..\\dist\\Parent.jar",
+                "..\\META-INF\\MANIFEST.MF",
+                "SysFile\\*.class"
+            ]
+        }
+    ]
+}
