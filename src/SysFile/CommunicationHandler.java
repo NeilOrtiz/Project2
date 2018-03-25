@@ -139,7 +139,7 @@ public class CommunicationHandler {
             System.out.println("Host "+Integer.toString(id)+" said "+reply);
             this.sockets_ht.put(id,s);
             this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's hosts list
-            Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
+            Receiver newClient = new Receiver(readSocket, this.dad,this,id);// Stablich receiver socket
             newClient.start();
 
         } catch (IOException ex) {
@@ -166,7 +166,7 @@ public class CommunicationHandler {
                 System.out.println("Accepted Host "+id+" connection request.");
                 this.sockets_ht.put(id,NewClient);
                 this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's clients list 
-                Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
+                Receiver newClient = new Receiver(readSocket, this.dad,this,id);// Stablich receiver socket
                 newClient.start();
             }
             success=true;
