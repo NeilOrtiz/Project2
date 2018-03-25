@@ -41,6 +41,9 @@ public class Parent {
                 System.out.println("F-server "+myID+ " is Online");
             }
 
+            HeartBeat heart = new HeartBeat(myID);
+            heart.start();
+
         } else if (args[1].equals("c")) {
 
             System.out.println("This is the client "+args[0]);
