@@ -5,10 +5,12 @@ import java.util.Scanner;
 public class Parent {
 
     public int myID;
+    public String typeHost;
     public boolean listening;
 
-    public Parent(int myID) {
+    public Parent(int myID,String typeHost) {
         this.myID=myID;
+        this.typeHost=typeHost;
         this.listening=true;
     }
 
@@ -21,7 +23,7 @@ public class Parent {
         
         int myID=Integer.parseInt(args[0]);
         String typeHost = args[1];
-        Parent dad = new Parent(myID);
+        Parent dad = new Parent(myID,typeHost);
         CommunicationHandler cH=new CommunicationHandler(dad, myID);
         
         if (args[1].equals("M")) {

@@ -17,17 +17,33 @@ public class Receiver extends Thread {
 
     @Override
 	public void run() {
+        String msg="Connection lost";
 
         while (dad.listening) {
 
-            try {
-                String msg =readSocket.readLine();
-                System.out.println(msg);
+            if (dad.typeHost.equals("M")) {
 
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                System.exit(1);
+                try {
+                    msg =readSocket.readLine();
+                    System.out.println(msg);
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                    System.exit(1);
+                }
+                
+
+            } else {
+
+                try {
+                    msg =readSocket.readLine();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                    System.exit(1);
+                }
+
             }
+
+            
 
 
 

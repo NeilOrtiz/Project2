@@ -15,7 +15,7 @@ public class Sender {
         try {
             socket_list.get(destID).println(msg);
         } catch (NullPointerException err) {
-            err.printStackTrace();
+            // err.printStackTrace();
             System.exit(1);
         }
 
