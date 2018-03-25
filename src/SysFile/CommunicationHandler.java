@@ -17,7 +17,7 @@ public class CommunicationHandler {
     public static final int PORT_NUMBER_LISTEN=1895;
     public Hashtable<Integer,PrintWriter> peers_listen;// Hash table that contains writeSockets
     public int numberconneEspect;
-    private Hashtable<Integer,Socket> sockets_ht;
+    public Hashtable<Integer,Socket> sockets_ht;
 
 
     public CommunicationHandler(Parent dad, int myID) {

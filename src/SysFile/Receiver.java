@@ -21,6 +21,7 @@ public class Receiver extends Thread {
 	public void run() {
         String msg="Connection lost";
         int counter=0;
+        boolean it=false;
 
         while (dad.listening) {
 
@@ -32,10 +33,17 @@ public class Receiver extends Thread {
                     if (msg!=null){
                         System.out.println(msg);
                         counter=0;
+                        it=false;
                     } else {
                         counter++;
                         if (counter%4==0) {
                             System.out.println("Connection lost with F-server "+idGuest);
+                            if (it==false) {
+                                cH.peers_listen.remove(idGuest);
+                                cH.sockets_ht.remove(idGuest);
+                                it=true;
+                            }
+                            
                         } else {
                             try {
                                 Thread.sleep(5000);
