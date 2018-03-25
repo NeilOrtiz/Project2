@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
 
@@ -15,6 +16,8 @@ public class CommunicationHandler {
     public Hashtable<Integer,String> ms;// M-server connection hash table
     public static final int PORT_NUMBER_LISTEN=1895;
     public Hashtable<Integer,PrintWriter> peers_listen;// Hash table that contains writeSockets
+    public int numberconneEspect;
+    private Hashtable<Integer,Socket> sockets_ht;
 
 
     public CommunicationHandler(Parent dad, int myID) {
@@ -24,6 +27,8 @@ public class CommunicationHandler {
         this.cList=new Hashtable<Integer,String>();
         this.ms=new Hashtable<Integer,String>();
         this.peers_listen=new Hashtable<Integer,PrintWriter>();
+        this.numberconneEspect=0;
+        this.sockets_ht=new Hashtable<Integer,Socket>();
     }
 
     public boolean estComm(String typeHost) {
@@ -31,6 +36,8 @@ public class CommunicationHandler {
 
         switch (typeHost) {
             case "M":
+                
+                this.numberconneEspect=5;
                 this.getList(typeHost);
                 this.connectAll(fsList);
                 this.connectAll(cList);
@@ -100,6 +107,7 @@ public class CommunicationHandler {
             writeSocket.println(this.myID);// Sent my ID to my neighbor
             String reply = readSocket.readLine();// Wait for its reply
             System.out.println("Host "+Integer.toString(id)+" said "+reply);
+            this.sockets_ht.put(id,s);
             this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's hosts list
             Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
             newClient.start();
@@ -114,9 +122,15 @@ public class CommunicationHandler {
     public boolean listeNewConnection() {
         boolean success=false;
 
-        System.out.println("Listening incoming connections...");
-        success=true;
+        //System.out.println("Listening incoming connections...");
 
+        try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER_LISTEN)) {
+
+            success=true;
+        } catch (IOException e) {
+            success=false;
+            e.printStackTrace();
+        }
         return success;
 
     }
