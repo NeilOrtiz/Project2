@@ -34,7 +34,7 @@ public class Receiver extends Thread {
                         counter=0;
                     } else {
                         counter++;
-                        if (counter==4) {
+                        if (counter%4==0) {
                             System.out.println("Connection lost with F-server "+idGuest);
                         } else {
                             try {
