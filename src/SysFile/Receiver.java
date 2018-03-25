@@ -36,11 +36,12 @@ public class Receiver extends Thread {
                         counter++;
                         if (counter%4==0) {
                             System.out.println("Connection lost with F-server "+idGuest);
-                            cH.peers_listen.remove(idGuest);
-                            cH.sockets_ht.remove(idGuest);
-                            cH.reconnection();
+                            cH.peers_listen.remove(idGuest); // remove socket id from hashtable
+                            cH.sockets_ht.remove(idGuest);// remove socket id from hashtable
+                            readSocket.close();
+                            cH.reconnection(); // wait a new connection request
                             System.out.println("Connection restored with F-server "+idGuest);
-                            break;
+                            break; // finish thread
                             
                         } else {
                             try {
