@@ -35,11 +35,22 @@ public class Parent {
 
         } else if (args[1].equals("s")) {
 
-            System.out.println("This is the file-server "+args[0]);
+            // System.out.println("This is the file-server "+args[0]);
+            boolean success= cH.estComm(typeHost);
+            if (success==true) {
+                System.out.println("F-server "+myID+ " is Online");
+            }
 
         } else if (args[1].equals("c")) {
 
             System.out.println("This is the client "+args[0]);
+
+            boolean success= cH.estComm(typeHost);
+            if (success==true) {
+                System.out.println("Client "+myID+ " is Online");
+            }
+
+
             Scanner choice = new Scanner(System.in);
             int choiceEntry=-1;
 

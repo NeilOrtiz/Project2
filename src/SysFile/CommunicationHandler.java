@@ -52,11 +52,29 @@ public class CommunicationHandler {
                 break;
         
             case "s":
-            //TODO: cH.estComm.s
+                this.numberconneEspect=3;
+                this.getList(typeHost);
+                this.connectAll(ms);
+                this.connectAll(cList);
+                listSuccess = this.listeNewConnection();
+                if (listSuccess) {
+                    success=true;
+                } else {
+                    success=false;
+                }
                 break;
 
             default:
-            //TODO: cH.estComm.c
+                this.numberconneEspect=4;
+                this.getList(typeHost);
+                this.connectAll(ms);
+                this.connectAll(fsList);
+                listSuccess = this.listeNewConnection();
+                if (listSuccess) {
+                    success=true;
+                } else {
+                    success=false;
+                }
                 break;
         }
 
@@ -80,11 +98,23 @@ public class CommunicationHandler {
                 break;
 
             case "s":
-                // TODO: cH.getList.s
+                //M-server
+                this.ms.put(10,"dc10.utdallas.edu");
+
+                // Clients list
+                for (int i=1;i<=2;i++){
+                    this.cList.put(i, "dc0"+Integer.toString(i)+".utdallas.edu");
+                }
                 break;
         
             default: //Clients
-            // TODO: cH.getList.c
+                //M-server
+                this.ms.put(10,"dc10.utdallas.edu");
+
+                // F-server
+                for (int i=11;i<=13;i++){
+                    this.fsList.put(i, "dc"+Integer.toString(i)+".utdallas.edu");
+                }
                 break;
         }
 
