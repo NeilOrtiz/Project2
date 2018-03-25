@@ -20,7 +20,17 @@ public class Receiver extends Thread {
 
         while (dad.listening) {
 
-            //TODO: Receiver.run()
+            try {
+                String msg =readSocket.readLine();
+                System.out.println(msg);
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                System.exit(1);
+            }
+
+
+
 
         }
 

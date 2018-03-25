@@ -40,12 +40,10 @@ public class HeartBeat extends Thread {
     }
 
     public String generateMsg(){
-        String msg,datas=null;
 
-        datas=this.enquiry();
+        String datas=this.enquiry();
 
-        msg=this.myID+","+"hb"+","+datas;
-        //TODO: HeartBeat.generateMsg()
+        String msg=this.myID+","+"hb"+","+datas;
 
         return msg;
     }
