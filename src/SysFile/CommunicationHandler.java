@@ -126,6 +126,19 @@ public class CommunicationHandler {
 
         try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER_LISTEN)) {
 
+            while (this.sockets_ht.size()<this.numberconneEspect) {
+                Socket NewClient = serverSocket.accept();
+                BufferedReader readSocket = new BufferedReader ( new InputStreamReader (NewClient.getInputStream()));
+                PrintWriter writeSocket = new PrintWriter (NewClient.getOutputStream(),true);
+
+                int id=Integer.parseInt(readSocket.readLine());
+                writeSocket.println("Hi");
+                System.out.println("Accepted Host "+id+" connection request.");
+                this.sockets_ht.put(id,NewClient);
+                this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's clients list 
+                Receiver newClient = new Receiver(readSocket, this.dad,this);// Stablich receiver socket
+                newClient.start();
+            }
             success=true;
         } catch (IOException e) {
             success=false;
