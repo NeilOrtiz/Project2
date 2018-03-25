@@ -77,9 +77,6 @@ public class CommunicationHandler {
                 }
                 break;
         }
-
-        
-        //TODO: CH.estComm()
         return success;
     }
 
@@ -176,5 +173,24 @@ public class CommunicationHandler {
         }
         return success;
 
+    }
+
+    public void reconnection() {
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER_LISTEN)) {
+            Socket NewClient = serverSocket.accept();
+            BufferedReader readSocket = new BufferedReader ( new InputStreamReader (NewClient.getInputStream()));
+            PrintWriter writeSocket = new PrintWriter (NewClient.getOutputStream(),true);
+            int id=Integer.parseInt(readSocket.readLine());
+            writeSocket.println("Hi");
+            System.out.println("Accepted Host "+id+" connection request.");
+            this.sockets_ht.put(id,NewClient);
+            this.peers_listen.put(id, writeSocket);// Add the writeSocket to the receiver's clients list
+            Receiver newClient = new Receiver(readSocket, this.dad,this,id);// Stablich receiver socket
+            newClient.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

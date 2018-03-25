@@ -21,11 +21,10 @@ public class Receiver extends Thread {
 	public void run() {
         String msg="Connection lost";
         int counter=0;
-        boolean it=false;
 
         while (dad.listening) {
 
-            if (dad.typeHost.equals("M")) {
+            if (dad.typeHost.equals("M")||dad.typeHost.equals("c")) {
 
                 try {
                     msg =readSocket.readLine();
@@ -33,16 +32,15 @@ public class Receiver extends Thread {
                     if (msg!=null){
                         System.out.println(msg);
                         counter=0;
-                        it=false;
                     } else {
                         counter++;
                         if (counter%4==0) {
                             System.out.println("Connection lost with F-server "+idGuest);
-                            if (it==false) {
-                                cH.peers_listen.remove(idGuest);
-                                cH.sockets_ht.remove(idGuest);
-                                it=true;
-                            }
+                            cH.peers_listen.remove(idGuest);
+                            cH.sockets_ht.remove(idGuest);
+                            cH.reconnection();
+                            System.out.println("Connection restored with F-server "+idGuest);
+                            break;
                             
                         } else {
                             try {
@@ -77,6 +75,9 @@ public class Receiver extends Thread {
 
 
         }
+
+        long threadId =Thread.currentThread().getId();
+        System.out.println("Thread # "+threadId+" from F-server id "+idGuest+" has finished");
 
         
 
