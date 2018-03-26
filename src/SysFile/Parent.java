@@ -1,5 +1,6 @@
 package SysFile;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class Parent {
@@ -7,11 +8,13 @@ public class Parent {
     public int myID;
     public String typeHost;
     public boolean listening;
+    public File folder;
 
     public Parent(int myID,String typeHost) {
         this.myID=myID;
         this.typeHost=typeHost;
         this.listening=true;
+        this.folder=null;
     }
 
     public static void main (String[] args) {
@@ -37,13 +40,17 @@ public class Parent {
 
         } else if (args[1].equals("s")) {
 
+            dad.getFolderPath(myID);
+
             // System.out.println("This is the file-server "+args[0]);
             boolean success= cH.estComm(typeHost);
             if (success==true) {
                 System.out.println("F-server "+myID+ " is Online");
             }
 
-            HeartBeat heart = new HeartBeat(myID,dad,cH);
+            
+
+            HeartBeat heart = new HeartBeat(myID,dad,cH,dad.folder);
             heart.start();
 
         } else if (args[1].equals("c")) {
@@ -120,5 +127,31 @@ public class Parent {
 
     public void terminate() {
         this.listening=false;
+    }
+
+    public void getFolderPath(int serverId){
+
+        switch (serverId) {
+            case 11:
+                this.folder=new File("./Server11/");
+                System.out.println(this.folder.lastModified());
+                break;
+
+            case 12:
+                this.folder=new File("./Server12/");
+                System.out.println(this.folder.lastModified());
+                break;
+
+            case 13:
+                this.folder=new File("./Server13/");
+                System.out.println(this.folder.lastModified());
+                break;
+        
+            default:
+                System.err.println("Usage: java -jar Project2/dist/Parent.jar <11|12|13> <s>");
+                System.exit(1);
+                break;
+        }
+
     }
 } 

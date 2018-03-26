@@ -1,5 +1,6 @@
 package SysFile;
 
+import java.io.File;
 
 public class HeartBeat extends Thread {
 
@@ -7,13 +8,15 @@ public class HeartBeat extends Thread {
     private Parent dad;
     private Sender sender ;
     private CommunicationHandler cH;
+    private File folder;
 
-    public HeartBeat (int myID,Parent dad, CommunicationHandler cH) {
+    public HeartBeat (int myID,Parent dad, CommunicationHandler cH,File folder) {
         super("Receiver");
         this.dad=dad;
         this.myID=myID;
         this.sender= new Sender();
         this.cH=cH;
+        this.folder=folder;
 
     }
 
@@ -24,7 +27,7 @@ public class HeartBeat extends Thread {
         while (dad.listening) {
 
             // do something
-            msg=this.generateMsg();
+            msg=this.generateMsg(this.folder);
             sender.sendMessage(msg, cH.peers_listen,10);
             try {
                 Thread.sleep(5000);
@@ -39,17 +42,24 @@ public class HeartBeat extends Thread {
 
     }
 
-    public String generateMsg(){
+    public String generateMsg(File folder){
 
-        String datas=this.enquiry();
+        String datas=this.enquiry(folder);
 
         String msg=this.myID+","+"hb"+","+datas;
 
         return msg;
     }
 
-    public String enquiry(){
+    public String enquiry(File folder){
         String update=null;
+        File[] filesFolder = folder.listFiles();
+
+        for (File file:filesFolder) {
+            if (file.isFile()) {
+                System.out.println(file.getName());
+            }
+        }
 
         update="Holas";
         //TODO: HeartBeat.enquiry()
