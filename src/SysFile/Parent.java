@@ -134,17 +134,14 @@ public class Parent {
         switch (serverId) {
             case 11:
                 this.folder=new File("./Server11/");
-                System.out.println(this.folder.lastModified());
                 break;
 
             case 12:
                 this.folder=new File("./Server12/");
-                System.out.println(this.folder.lastModified());
                 break;
 
             case 13:
                 this.folder=new File("./Server13/");
-                System.out.println(this.folder.lastModified());
                 break;
         
             default:

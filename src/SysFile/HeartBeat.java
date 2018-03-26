@@ -1,6 +1,8 @@
 package SysFile;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeartBeat extends Thread {
 
@@ -9,6 +11,7 @@ public class HeartBeat extends Thread {
     private Sender sender ;
     private CommunicationHandler cH;
     private File folder;
+    private List<String> fileNameList;
 
     public HeartBeat (int myID,Parent dad, CommunicationHandler cH,File folder) {
         super("Receiver");
@@ -17,6 +20,7 @@ public class HeartBeat extends Thread {
         this.sender= new Sender();
         this.cH=cH;
         this.folder=folder;
+        this.fileNameList=new ArrayList<String>();
 
     }
 
@@ -57,12 +61,13 @@ public class HeartBeat extends Thread {
 
         for (File file:filesFolder) {
             if (file.isFile()) {
-                System.out.println(file.getName());
+                this.fileNameList.add(file.getName());
             }
         }
 
-        update="Holas";
-        //TODO: HeartBeat.enquiry()
+        update=fileNameList.toString();
+        fileNameList.clear();
+
         return update;
 
     }
