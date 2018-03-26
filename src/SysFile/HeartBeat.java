@@ -11,7 +11,8 @@ public class HeartBeat extends Thread {
     private Sender sender ;
     private CommunicationHandler cH;
     private File folder;
-    private List<String> fileNameList;
+    private List<String> setChunks;
+    private List<String> chunks;
 
     public HeartBeat (int myID,Parent dad, CommunicationHandler cH,File folder) {
         super("Receiver");
@@ -20,7 +21,8 @@ public class HeartBeat extends Thread {
         this.sender= new Sender();
         this.cH=cH;
         this.folder=folder;
-        this.fileNameList=new ArrayList<String>();
+        this.setChunks=new ArrayList<String>();
+        this.chunks=new ArrayList<String>();
 
     }
 
@@ -61,12 +63,15 @@ public class HeartBeat extends Thread {
 
         for (File file:filesFolder) {
             if (file.isFile()) {
-                this.fileNameList.add(file.getName());
+                this.chunks.add(file.getName());
+                this.chunks.add(String.valueOf(file.lastModified()));
+                this.setChunks.add(chunks.toString());
+                this.chunks.clear();
             }
         }
 
-        update=fileNameList.toString();
-        fileNameList.clear();
+        update=setChunks.toString();
+        setChunks.clear();
 
         return update;
 
