@@ -137,8 +137,10 @@ public class Chunk {
 		File f = new File(SourceFileName);
 
 		if (f.exists()) {
-			//Identify last Chunk;
-			PART_NAME="";
+			//Identify last # Chunk in directory;
+			int lastC=this.lastChunk(fileName, pathFile);
+			lastC++;
+			PART_NAME="data_"+lastC+".bin";
 		} else {
 			PART_NAME ="data_"+0+".bin";
 		}
@@ -150,6 +152,29 @@ public class Chunk {
 
 	public void append (int appended_size,String fileName,String pathFile){
 		//TODO: Chunk.append()
+	}
+
+	public int lastChunk(String fileName,String pathFile){
+		int temp=0;
+		String binNs;
+		int binNi;
+		//String SourceFileName=pathFile+"\\"+fileName;
+		File f = new File(pathFile);
+
+		File[] filesFolder= f.listFiles();
+
+		for (File file:filesFolder) {
+			if (file.isFile()) {
+				binNs=file.getName().split("_")[2];
+				binNi=Integer.parseInt(binNs);
+				if (binNi>temp) {
+					temp=binNi;
+				}
+			}
+
+		}
+
+		return temp;
 	}
 
 }
