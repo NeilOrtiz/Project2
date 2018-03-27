@@ -125,7 +125,6 @@ public class Chunk {
 	public void create ( String pathFile,String fileName, int CHUNK_SIZE ) {
 
 		String PART_NAME;
-		String SourceFileName=pathFile+"\\"+fileName;
 		String fileName2 =fileName.split("\\.")[0];
 		byte[] bytes = new byte[1500];
 		try {
@@ -133,21 +132,25 @@ public class Chunk {
 		} catch (NoSuchAlgorithmException ex ) {
 			ex.printStackTrace();
 		}
-		
-		File f = new File(SourceFileName);
+			
+		File f = new File(pathFile);
+		File[] filesFolder= f.listFiles();
 
-		if (f.exists()) {
-			//Identify last # Chunk in directory;
-			int lastC=this.lastChunk(fileName, pathFile);
-			lastC++;
-			PART_NAME="data_"+lastC+".bin";
-		} else {
-			PART_NAME ="data_"+0+".bin";
+		for (File file:filesFolder) {
+			if (file.isFile()) {
+				if (file.getName().split("_")[0].equals(fileName2)){
+					int lastC=this.lastChunk(fileName, pathFile);
+					lastC++;
+					PART_NAME="data_"+lastC+".bin";
+					write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+					break;
+				}
+				else {
+					PART_NAME ="data_"+0+".bin";
+					write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+				}	
+			}
 		}
-
-
-		
-		write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
 	}
 
 	public void append (int appended_size,String fileName,String pathFile){
@@ -174,10 +177,7 @@ public class Chunk {
 						temp=binNi;
 					}
 
-				}
-
-
-				
+				}				
 			}
 
 		}
