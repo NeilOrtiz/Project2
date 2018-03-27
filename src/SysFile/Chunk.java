@@ -36,7 +36,7 @@ public class Chunk {
 			try {
 				inStream = new BufferedInputStream ( new FileInputStream( willBeRead ));
 				while ( totalBytesRead < FILE_SIZE ){
-					String PART_NAME ="data"+NUMBER_OF_CHUNKS+".bin";
+					String PART_NAME ="data_"+NUMBER_OF_CHUNKS+".bin";
 					int bytesRemaining = FILE_SIZE-totalBytesRead;
 					if ( bytesRemaining < CHUNK_SIZE ){
 						// Remaining Data Part is Smaller Than CHUNK_SIZE
@@ -124,7 +124,8 @@ public class Chunk {
 
 	public void create ( String pathFile,String fileName, int CHUNK_SIZE ) {
 
-		//String SourceFileName=pathFile+"\\"+fileName;
+		String PART_NAME;
+		String SourceFileName=pathFile+"\\"+fileName;
 		String fileName2 =fileName.split("\\.")[0];
 		byte[] bytes = new byte[1500];
 		try {
@@ -132,8 +133,23 @@ public class Chunk {
 		} catch (NoSuchAlgorithmException ex ) {
 			ex.printStackTrace();
 		}
-		String PART_NAME ="data"+0+".bin";
+		
+		File f = new File(SourceFileName);
+
+		if (f.exists()) {
+			//Identify last Chunk;
+			PART_NAME="";
+		} else {
+			PART_NAME ="data_"+0+".bin";
+		}
+
+
+		
 		write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+	}
+
+	public void append (int appended_size,String fileName,String pathFile){
+		//TODO: Chunk.append()
 	}
 
 }
