@@ -165,11 +165,17 @@ public class Chunk {
 
 		for (File file:filesFolder) {
 			if (file.isFile()) {
-				binNs=file.getName().split("_")[2];
-				binNi=Integer.parseInt(binNs);
-				if (binNi>temp) {
-					temp=binNi;
+				if (file.getName().equals(fileName)){
+					binNs=file.getName().split("_")[2];
+					binNi=Integer.parseInt(binNs);
+					if (binNi>temp) {
+						temp=binNi;
+					}
+
 				}
+
+
+				
 			}
 
 		}
