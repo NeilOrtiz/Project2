@@ -16,6 +16,7 @@ import java.util.ArrayList;
 //import javax.swing.*;
 
 public class Chunk {
+	public static final int MAX_LENGTH=8192;
 
     public ArrayList<String> readAndFragment ( String pathFile,String fileName, int CHUNK_SIZE ) throws IOException {
 
@@ -24,6 +25,7 @@ public class Chunk {
 		File willBeRead = new File ( SourceFileName );
 		int FILE_SIZE = (int) willBeRead.length();
 		ArrayList<String> nameList = new ArrayList<String> ();
+		
 	  
 		System.out.println("Total File Size: "+FILE_SIZE);
 	  
@@ -154,7 +156,23 @@ public class Chunk {
 	}
 
 	public void append (int appended_size,String fileName,String pathFile){
-		//TODO: Chunk.append()
+		
+		String SourceFileName=pathFile+"\\"+fileName;
+		File f = new File(SourceFileName);
+		String fileName2=f.getName().split("_")[0];
+		fileName2=fileName2+"\\.txt";
+		long S=f.length();
+
+		if ((MAX_LENGTH-S)<appended_size) {
+			// Append operation
+		} else {
+			//Refill last chunk with null
+			this.create(pathFile, fileName2, appended_size);
+
+		}
+
+
+
 	}
 
 	public int lastChunk(String fileName,String pathFile){
@@ -184,5 +202,6 @@ public class Chunk {
 
 		return temp;
 	}
+
 
 }
