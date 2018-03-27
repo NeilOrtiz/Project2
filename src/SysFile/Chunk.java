@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 //import java.util.zip.CRC32;
 //import javax.swing.*;
@@ -37,7 +39,7 @@ public class Chunk {
 					String PART_NAME ="data"+NUMBER_OF_CHUNKS+".bin";
 					int bytesRemaining = FILE_SIZE-totalBytesRead;
 					if ( bytesRemaining < CHUNK_SIZE ){
-						 // Remaining Data Part is Smaller Than CHUNK_SIZE
+						// Remaining Data Part is Smaller Than CHUNK_SIZE
 						// CHUNK_SIZE is assigned to remain volume
 						CHUNK_SIZE = bytesRemaining;
 						System.out.println("CHUNK_SIZE: "+CHUNK_SIZE);
@@ -119,4 +121,19 @@ public class Chunk {
 		}
 		System.out.println("Merge was executed successfully.!");
 	}
+
+	public void create ( String pathFile,String fileName, int CHUNK_SIZE ) {
+
+		//String SourceFileName=pathFile+"\\"+fileName;
+		String fileName2 =fileName.split("\\.")[0];
+		byte[] bytes = new byte[1500];
+		try {
+			SecureRandom.getInstanceStrong().nextBytes(bytes);
+		} catch (NoSuchAlgorithmException ex ) {
+			ex.printStackTrace();
+		}
+		String PART_NAME ="data"+0+".bin";
+		write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+	}
+
 }
