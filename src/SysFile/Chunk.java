@@ -158,6 +158,7 @@ public class Chunk {
 		int temp=0;
 		String binNs;
 		int binNi;
+		String fileName2 =fileName.split("\\.")[0];
 		//String SourceFileName=pathFile+"\\"+fileName;
 		File f = new File(pathFile);
 
@@ -165,8 +166,9 @@ public class Chunk {
 
 		for (File file:filesFolder) {
 			if (file.isFile()) {
-				if (file.getName().equals(fileName)){
+				if (file.getName().split("_")[0].equals(fileName2)){
 					binNs=file.getName().split("_")[2];
+					binNs=binNs.split("\\.")[0];
 					binNi=Integer.parseInt(binNs);
 					if (binNi>temp) {
 						temp=binNi;
