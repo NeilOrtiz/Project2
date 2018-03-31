@@ -31,13 +31,15 @@ public class Parent {
         
         
         if (args[1].equals("M")) {
-
-            System.out.println("This is the M-server");
-
+            Mserver mserver=new Mserver();
+            
             boolean success= cH.estComm(typeHost);
             if (success==true) {
                 System.out.println("M-server Online");
             }
+
+            mserver.execute();
+
 
         } else if (args[1].equals("s")) {
 
