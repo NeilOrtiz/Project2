@@ -169,6 +169,23 @@ public class Chunk {
 		
 			if ((diference)<appended_size) {
 				//Refill last chunk with null
+
+				byte[] bytesNull = new byte[diference];
+				//System.arraycopy(bytesNull, srcPos, bytesNull, destPos, diference);
+				//byte ar[]=new String(bytesNull).replaceAll("\0", "254").getBytes();
+				
+				if (f.exists()){
+					try {
+						Files.write(f.toPath(),bytesNull,StandardOpenOption.APPEND);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					System.out.println("[ERROR] File no exist. No possible to append");
+				}
+
+
+				// Create new Chunk
 				this.create(pathFile, fileName2, appended_size);
 			} else {
 				// Creating ramdon bytes
@@ -223,5 +240,9 @@ public class Chunk {
 		return temp;
 	}
 
+	public void read(String fileName,String pathFile, int startOffset, int endOffset) {
+		//TODO: Chunk.read()
+
+	}
 
 }
