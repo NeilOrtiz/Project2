@@ -1,26 +1,20 @@
 package SysFile;
 
-import java.io.File;
 
 public class Fserver {
 
-    private int myID;
     private Parent dad;
     private CommunicationHandler cH;
-    private File folder;
 
-    public Fserver(int myID,Parent dad, CommunicationHandler cH,File folder) {
+    public Fserver(Parent dad, CommunicationHandler cH) {
 
         this.dad=dad;
-        this.myID=myID;
         this.cH=cH;
-        this.folder=folder;
     }
 
     public void execute(){
 
-        System.out.println("************ EXECUTANDO DESDE F SERVER CLASS *********");
-        HeartBeat heart = new HeartBeat(myID,dad,cH,dad.folder);
+        HeartBeat heart = new HeartBeat(dad.myID,dad,cH,dad.folder);
         heart.start();
 
     }
