@@ -1,4 +1,4 @@
-package SysFile;
+package sysfile;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,11 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-//import java.util.zip.CRC32;
-//import javax.swing.*;
 
 public class Chunk {
 	public static final int MAX_LENGTH=8192;
@@ -75,7 +75,7 @@ public class Chunk {
 			try {
 				output = new BufferedOutputStream(new FileOutputStream(DestinationFileName));
 				output.write( DataByteArray );
-				System.out.println("Writing Process Was Performed");
+				//System.out.println("Writing Process Was Performed");
 			}
 			finally {
 				output.close();
@@ -126,9 +126,10 @@ public class Chunk {
 
 	public void create ( String pathFile,String fileName, int CHUNK_SIZE ) {
 
+		boolean found=false;
 		String PART_NAME;
 		String fileName2 =fileName.split("\\.")[0];
-		byte[] bytes = new byte[1500];
+		byte[] bytes = new byte[CHUNK_SIZE];
 		try {
 			SecureRandom.getInstanceStrong().nextBytes(bytes);
 		} catch (NoSuchAlgorithmException ex ) {
@@ -141,38 +142,57 @@ public class Chunk {
 		for (File file:filesFolder) {
 			if (file.isFile()) {
 				if (file.getName().split("_")[0].equals(fileName2)){
+					found=true;
 					int lastC=this.lastChunk(fileName, pathFile);
 					lastC++;
 					PART_NAME="data_"+lastC+".bin";
 					write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
-					break;
-				}
-				else {
-					PART_NAME ="data_"+0+".bin";
-					write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
 				}	
 			}
 		}
+		if (!found) {
+			PART_NAME ="data_"+0+".bin";
+			write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+		}
+
 	}
 
 	public void append (int appended_size,String fileName,String pathFile){
+
+		if (!(appended_size>MAX_LENGTH)) {
+			String SourceFileName=pathFile+"\\"+fileName;
+			File f = new File(SourceFileName);
+			String fileName2=f.getName().split("_")[0];
+			long S=f.length();
+			int tempo=(int) S;
+			int diference=MAX_LENGTH-tempo;
 		
-		String SourceFileName=pathFile+"\\"+fileName;
-		File f = new File(SourceFileName);
-		String fileName2=f.getName().split("_")[0];
-		fileName2=fileName2+"\\.txt";
-		long S=f.length();
-
-		if ((MAX_LENGTH-S)<appended_size) {
-			// Append operation
+			if ((diference)<appended_size) {
+				//Refill last chunk with null
+				this.create(pathFile, fileName2, appended_size);
+			} else {
+				// Creating ramdon bytes
+				byte[] bytes = new byte[appended_size];
+				try {
+					SecureRandom.getInstanceStrong().nextBytes(bytes);
+				} catch (NoSuchAlgorithmException ex ) {
+					ex.printStackTrace();
+				}
+				// Append operation
+				if (f.exists()){
+					try {
+						Files.write(f.toPath(),bytes,StandardOpenOption.APPEND);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					System.out.println("[ERROR] File no exist. No possible to append");
+				}
+			}
 		} else {
-			//Refill last chunk with null
-			this.create(pathFile, fileName2, appended_size);
-
+			System.err.println("[ERROR] Size file bigger than 8192 bytes");
+			System.exit(-1);
 		}
-
-
-
 	}
 
 	public int lastChunk(String fileName,String pathFile){
