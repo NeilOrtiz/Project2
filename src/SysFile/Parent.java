@@ -1,7 +1,6 @@
 package SysFile;
 
 import java.io.File;
-import java.util.Scanner;
 
 public class Parent {
 
@@ -32,7 +31,7 @@ public class Parent {
         
         if (args[1].equals("M")) {
             Mserver mserver=new Mserver();
-            
+
             boolean success= cH.estComm(typeHost);
             if (success==true) {
                 System.out.println("M-server Online");
@@ -56,7 +55,7 @@ public class Parent {
         
         } else if (args[1].equals("c")) {
 
-            Client client=new Client();
+            Client client=new Client(dad,cH);
             System.out.println("This is the client "+args[0]);
 
             boolean success= cH.estComm(typeHost);

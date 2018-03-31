@@ -3,9 +3,17 @@ package SysFile;
 import java.util.Scanner;
 
 public class Client {
+    private String msg;
+    private Parent dad;
+    private Sender sender;
+    private CommunicationHandler cH;
 
 
-    public Client(){
+    public Client(Parent dad,CommunicationHandler cH){
+        this.msg=null;
+        this.dad=dad;
+        this.sender=new Sender();
+        this.cH=cH;
 
     }
     public void execute() {
@@ -36,8 +44,14 @@ public class Client {
 
                 switch (choiceEntry) {
                     case 1:
+                    String newFileName;    
+                    
                         System.out.println("Creating");
                         System.out.println();
+                        System.out.print("Enter new File Name: ");
+                        newFileName=choice.nextLine();
+                        msg=dad.typeHost+","+dad.myID+","+"creation"+newFileName;
+                        sender.sendMessage(msg, cH.peers_listen, 10);
                         break;
 
                     case 2:

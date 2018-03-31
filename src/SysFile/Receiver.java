@@ -31,6 +31,7 @@ public class Receiver extends Thread {
 
                     if (msg!=null){
                         System.out.println(msg);
+                        
                         counter=0;
                     } else {
                         counter++;
