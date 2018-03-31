@@ -24,8 +24,8 @@ public class Fserver {
         //TODO: Fserver.append()
     }
 
-    public void newChunk(){
-        //TODO: Fserver.newChunk()
+    public void newChunk(String fileName){
+        chunk.create(dad.folder.getPath(), fileName, 0);
     }
 
     public void readChunk(){

@@ -30,7 +30,7 @@ public class Parent {
         
         
         if (args[1].equals("M")) {
-            Mserver mserver=new Mserver();
+            Mserver mserver=new Mserver(dad,cH);
 
             boolean success= cH.estComm(typeHost);
             if (success==true) {

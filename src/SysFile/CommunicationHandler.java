@@ -194,5 +194,17 @@ public class CommunicationHandler {
         }
     }
 
-    
+    public void newMsgReceived(String msg){
+        String sourceType;
+
+        sourceType=msg.split(",")[0];
+
+        if (sourceType.equals("c")){
+            Mserver mserver=new Mserver(dad,this);
+            mserver.newMsgClient(msg);
+        } 
+
+    }
+
+
 }
