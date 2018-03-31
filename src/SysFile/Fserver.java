@@ -19,5 +19,9 @@ public class Fserver {
 
     public void execute(){
 
+        System.out.println("************ EXECUTANDO DESDE F SERVER CLASS *********");
+        HeartBeat heart = new HeartBeat(myID,dad,cH,dad.folder);
+        heart.start();
+
     }
 }
