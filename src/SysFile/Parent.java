@@ -54,6 +54,7 @@ public class Parent {
         
         } else if (args[1].equals("c")) {
 
+            Client client=new Client();
             System.out.println("This is the client "+args[0]);
 
             boolean success= cH.estComm(typeHost);
@@ -61,58 +62,10 @@ public class Parent {
                 System.out.println("Client "+myID+ " is Online");
             }
 
+            client.execute();
 
-            Scanner choice = new Scanner(System.in);
-            int choiceEntry=-1;
 
-            while (choiceEntry!=4) {
-
-                while (choiceEntry<1 || choiceEntry >4) {
-
-                    System.out.println("Enter one of the following commands:");
-                    System.out.println("1 - Create");
-                    System.out.println("2 - Read");
-                    System.out.println("3 - Append");
-                    System.out.println("4 - Exit");
-                    System.out.println();
-                    if (choice.hasNextInt()) {
-
-                        choiceEntry=choice.nextInt();
-                        if (choiceEntry<1 || choiceEntry >4) {
-                            System.out.println("Invalidad input");
-                        }
-                        
-                    }
-                }
-
-                switch (choiceEntry) {
-                    case 1:
-                        System.out.println("Creating");
-                        System.out.println();
-                        break;
-
-                    case 2:
-                        System.out.println("Reading");
-                        System.out.println();
-                        break;
-
-                    case 3:
-                        System.out.println("Appending");
-                        System.out.println();
-                        break;
-
-                    case 4:
-                        System.out.println("Saliendo");
-                        choice.close();
-                        System.exit(1);
-                        break;
-                
-                    default:
-                        break;
-                }
-                choiceEntry=-1;
-            }
-            choice.close();
+            
 
             
 
