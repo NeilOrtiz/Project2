@@ -152,7 +152,8 @@ public class Chunk {
 		}
 		if (!found) {
 			PART_NAME ="data_"+0+".bin";
-			write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+			write (bytes,pathFile+"//"+fileName2+"_"+PART_NAME);
+			System.out.println("[INFO] New chunk "+fileName2+"_"+PART_NAME+" created");
 		}
 
 	}

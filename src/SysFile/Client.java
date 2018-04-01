@@ -1,5 +1,6 @@
 package SysFile;
 
+import java.io.Console;
 import java.util.Scanner;
 
 public class Client {
@@ -20,6 +21,7 @@ public class Client {
 
         System.out.println("********** Executando desde Client.java -***********");
         Scanner choice = new Scanner(System.in);
+        Console console = System.console();
             int choiceEntry=-1;
 
             while (choiceEntry!=4) {
@@ -48,9 +50,8 @@ public class Client {
                     
                         System.out.println("Creating");
                         System.out.println();
-                        System.out.print("Enter new File Name: ");
-                        newFileName=choice.nextLine();
-                        msg=dad.typeHost+","+dad.myID+","+"creation"+newFileName;
+                        newFileName=console.readLine("Enter new File Name: ");
+                        msg=dad.typeHost+","+dad.myID+","+"creation"+","+newFileName;
                         sender.sendMessage(msg, cH.peers_listen, 10);
                         break;
 
