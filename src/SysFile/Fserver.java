@@ -31,4 +31,17 @@ public class Fserver {
     public void readChunk(){
         //TODO: Fserver.readChunk()
     }
+
+    public void newMsgMserver(String msg){
+        String requestType,fileName;
+
+        requestType=msg.split(",")[2];
+        fileName=msg.split(",")[3];
+
+        if (requestType.equals("creation")){
+            this.newChunk(fileName);
+        }
+
+
+    }
 }

@@ -202,7 +202,10 @@ public class CommunicationHandler {
         if (sourceType.equals("c")){
             Mserver mserver=new Mserver(dad,this);
             mserver.newMsgClient(msg);
-        } 
+        } else if (sourceType.equals("M")) {
+            Fserver fserver=new Fserver(dad, this);
+            fserver.newMsgMserver(msg);
+        }
 
     }
 
