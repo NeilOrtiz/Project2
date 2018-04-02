@@ -128,7 +128,7 @@ public class Chunk {
 
 		boolean found=false;
 		String PART_NAME;
-		String fileName2 =fileName.split("\\.")[0];
+		String fileName2 =fileName.split("//.")[0];
 		byte[] bytes = new byte[CHUNK_SIZE];
 		try {
 			SecureRandom.getInstanceStrong().nextBytes(bytes);
@@ -146,7 +146,7 @@ public class Chunk {
 					int lastC=this.lastChunk(fileName, pathFile);
 					lastC++;
 					PART_NAME="data_"+lastC+".bin";
-					write (bytes,pathFile+"\\"+fileName2+"_"+PART_NAME);
+					write (bytes,pathFile+"//"+fileName2+"_"+PART_NAME);
 				}	
 			}
 		}
@@ -161,7 +161,9 @@ public class Chunk {
 	public void append (int appended_size,String fileName,String pathFile){
 
 		if (!(appended_size>MAX_LENGTH)) {
-			String SourceFileName=pathFile+"\\"+fileName;
+			String SourceFileName;
+			SourceFileName=this.lastChunkName(fileName, pathFile);
+			//String SourceFileName=pathFile+"//"+fileName;
 			File f = new File(SourceFileName);
 			String fileName2=f.getName().split("_")[0];
 			long S=f.length();
@@ -172,17 +174,16 @@ public class Chunk {
 				//Refill last chunk with null
 
 				byte[] bytesNull = new byte[diference];
-				//System.arraycopy(bytesNull, srcPos, bytesNull, destPos, diference);
-				//byte ar[]=new String(bytesNull).replaceAll("\0", "254").getBytes();
 				
 				if (f.exists()){
 					try {
 						Files.write(f.toPath(),bytesNull,StandardOpenOption.APPEND);
+						System.out.println("[INFO] File has been appended");
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
 				} else {
-					System.out.println("[ERROR] File no exist. No possible to append");
+					System.err.println("[ERROR] File not exist. No possible to append");
 				}
 
 
@@ -244,6 +245,17 @@ public class Chunk {
 	public void read(String fileName,String pathFile, int startOffset, int endOffset) {
 		//TODO: Chunk.read()
 
+	}
+
+	public String lastChunkName(String fileName,String pathFile){
+		String nameChunkFile=null;
+		int lastchunkNumber;
+
+		lastchunkNumber=this.lastChunk(fileName, pathFile);
+		nameChunkFile=pathFile+"//"+fileName+"_data_"+lastchunkNumber+".bin";
+
+		return nameChunkFile;
+		
 	}
 
 }

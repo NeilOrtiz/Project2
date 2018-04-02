@@ -20,20 +20,31 @@ public class Mserver {
     }
 
     public void newMsgClient(String msg){
-        String requestType,fileName;
-        int serverId;
+        String requestType,fileName,appendSize;
+        int serverId,destID;
 
         requestType=msg.split(",")[2];
         fileName=msg.split(",")[3];
 
+
         if (requestType.equals("creation")){
             //Select random Fserver. Get dstID
             serverId=this.randomFserver();
-            msg=dad.typeHost+","+dad.myID+","+"creation"+","+fileName+","+serverId+","+0;
+            msg=dad.typeHost+","+dad.myID+","+"creation"+","+fileName+","+serverId+","+0+","+0;
 
             // send request to Fserver
             sender.sendMessage(msg, cH.peers_listen, serverId);
+        } else if (requestType.equals("append")) {
+            destID=Integer.parseInt( msg.split(",")[1]); // Get Client ID who sent the request
+            appendSize=msg.split(",")[5];
+            serverId=checkFserver(fileName);
+            msg=dad.typeHost+","+dad.myID+","+"AnswerAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+            sender.sendMessage(msg, cH.peers_listen, destID);
         }
+    }
+
+    public void newMsgFserver(String msg){
+        //TODO: Mserver.newMsgFserver()
     }
 
     public int randomFserver(){
@@ -47,5 +58,15 @@ public class Mserver {
         System.out.println("F-server selected: "+answer);
 
         return answer;
+    }
+
+    public int checkFserver(String fileName){
+        int serverId;
+
+        //TODO: Mserver.checkFserver()
+        serverId=13;
+
+        return serverId;
+
     }
 }

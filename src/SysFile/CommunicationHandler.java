@@ -199,14 +199,29 @@ public class CommunicationHandler {
 
         sourceType=msg.split(",")[0];
 
-        if (sourceType.equals("c")){
-            Mserver mserver=new Mserver(dad,this);
-            mserver.newMsgClient(msg);
-        } else if (sourceType.equals("M")) {
-            Fserver fserver=new Fserver(dad, this);
-            fserver.newMsgMserver(msg);
-        }
+        if (dad.typeHost.equals("c")){
+            Client client=new Client(dad, this);
+            if (sourceType.equals("M")) {
+                client.newMsgMserver(msg);
+            } else {
+                client.newMsgFserver(msg);
+            }
 
+        } else if (dad.typeHost.equals("s")) {
+            Fserver fserver=new Fserver(dad, this);
+            if (sourceType.equals("M")) {
+                fserver.newMsgMserver(msg);
+            } else if (sourceType.equals("c")) {
+                fserver.newMsgClient(msg);
+            }
+        } else {
+            Mserver mserver=new Mserver(dad, this);
+            if (sourceType.equals("c")) {
+                mserver.newMsgClient(msg);
+            } else {
+                mserver.newMsgFserver(msg);
+            }
+        }
     }
 
 

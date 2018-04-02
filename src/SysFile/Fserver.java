@@ -6,12 +6,16 @@ public class Fserver {
     private Parent dad;
     private CommunicationHandler cH;
     private Chunk chunk;
+    private String pathFile;
+    private Sender sender;
 
     public Fserver(Parent dad, CommunicationHandler cH) {
 
         this.dad=dad;
         this.cH=cH;
         this.chunk=new Chunk();
+        this.pathFile=dad.folder.getPath();
+        this.sender=new Sender();
     }
 
     public void execute(){
@@ -20,8 +24,8 @@ public class Fserver {
         heart.start();
     }
 
-    public void appendChunk() {
-        //TODO: Fserver.append()
+    public void appendChunk(int appended_size,String fileName) {
+        chunk.append(appended_size, fileName, pathFile);
     }
 
     public void newChunk(String fileName){
@@ -43,5 +47,25 @@ public class Fserver {
         }
 
 
+    }
+
+    public void newMsgClient (String msg) {
+        String requestType,fileName,appendSize,serverId,sourceId;
+        int appended_size,destID;
+        sourceId=msg.split(",")[1];
+        destID=Integer.parseInt(sourceId);
+        requestType=msg.split(",")[2];
+        fileName=msg.split(",")[3];
+        appendSize=msg.split(",")[5];
+        serverId=msg.split(",")[4];
+        appended_size=Integer.parseInt(appendSize);
+
+        if (requestType.equals("append")){
+            this.appendChunk(appended_size,fileName);
+            // Notification to Client
+            msg=dad.typeHost+","+dad.myID+","+"notificationAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+            sender.sendMessage(msg, cH.peers_listen, destID);
+        }
+        
     }
 }
