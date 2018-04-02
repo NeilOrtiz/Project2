@@ -1,17 +1,21 @@
 package SysFile;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class Mserver {
     private Parent dad;
     private CommunicationHandler cH;
     private Sender sender ;
+    private Hashtable metadata;
     
 
     public Mserver(Parent dad, CommunicationHandler cH){
         this.dad=dad;
         this.cH=cH;
         this.sender= new Sender();
+        this.metadata=new Hashtable<String,ArrayList<String>>();
         
     }
 
