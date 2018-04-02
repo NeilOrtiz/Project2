@@ -107,8 +107,10 @@ public class Client {
         fileName=msg.split(",")[3];
         appendSize=msg.split(",")[5];
 
-        if (requestType.equals("notificationAppend")) {
+        if (requestType.equals("successAppend")) {
             System.out.println("[NOTI] "+appendSize+" bytes has been append in "+fileName+".");
+        } else if (requestType.equals("failedAppend")) {
+            System.out.println("[ERROR] "+appendSize+" bytes has NOT been append in "+fileName+".");
         }
 
         

@@ -24,8 +24,12 @@ public class Fserver {
         heart.start();
     }
 
-    public void appendChunk(int appended_size,String fileName) {
-        chunk.append(appended_size, fileName, pathFile);
+    public boolean appendChunk(int appended_size,String fileName) {
+        boolean success;
+    
+        success=chunk.append(appended_size, fileName, pathFile);
+
+        return success;
     }
 
     public void newChunk(String fileName){
@@ -61,9 +65,15 @@ public class Fserver {
         appended_size=Integer.parseInt(appendSize);
 
         if (requestType.equals("append")){
-            this.appendChunk(appended_size,fileName);
+            boolean success;
+            success=this.appendChunk(appended_size,fileName);
             // Notification to Client
-            msg=dad.typeHost+","+dad.myID+","+"notificationAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+
+            if (success){
+                msg=dad.typeHost+","+dad.myID+","+"successAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+            } else {
+                msg=dad.typeHost+","+dad.myID+","+"failedAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+            }
             sender.sendMessage(msg, cH.peers_listen, destID);
         }
         

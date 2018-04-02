@@ -158,7 +158,8 @@ public class Chunk {
 
 	}
 
-	public void append (int appended_size,String fileName,String pathFile){
+	public boolean append (int appended_size,String fileName,String pathFile){
+		boolean sucess=false;
 
 		if (!(appended_size>MAX_LENGTH)) {
 			String SourceFileName;
@@ -179,11 +180,14 @@ public class Chunk {
 					try {
 						Files.write(f.toPath(),bytesNull,StandardOpenOption.APPEND);
 						System.out.println("[INFO] File has been appended");
+						sucess=true;
 					} catch (IOException ex) {
 						ex.printStackTrace();
+						sucess=false;
 					}
 				} else {
 					System.err.println("[ERROR] File not exist. No possible to append");
+					sucess=false;
 				}
 
 
@@ -201,17 +205,21 @@ public class Chunk {
 				if (f.exists()){
 					try {
 						Files.write(f.toPath(),bytes,StandardOpenOption.APPEND);
+						sucess=true;
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
 				} else {
 					System.out.println("[ERROR] File no exist. No possible to append");
+					sucess=false;
 				}
 			}
 		} else {
 			System.err.println("[ERROR] Size file bigger than 8192 bytes");
 			System.exit(-1);
+			sucess=false;
 		}
+	return sucess;
 	}
 
 	public int lastChunk(String fileName,String pathFile){
