@@ -197,7 +197,7 @@ public class CommunicationHandler {
     public void newMsgReceived(String msg){
         String sourceType;
 
-        sourceType=msg.split(",")[0];
+        sourceType=msg.split(";")[0];
 
         if (dad.typeHost.equals("c")){
             Client client=new Client(dad, this);

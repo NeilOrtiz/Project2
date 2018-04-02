@@ -51,8 +51,8 @@ public class HeartBeat extends Thread {
     public String generateMsg(File folder){
 
         String datas=this.enquiry(folder);
-
-        String msg=this.myID+","+"hb"+","+datas;
+        String msg=dad.typeHost+";"+dad.myID+";"+"hb"+";"+datas;
+        //String msg=this.myID+";"+"hb"+";"+datas;
 
         return msg;
     }
@@ -70,7 +70,16 @@ public class HeartBeat extends Thread {
             }
         }
 
+        // for (File file:filesFolder) {
+        //     if (file.isFile()) {
+        //         this.chunks.add(file.getName()+"-"+String.valueOf(file.lastModified()));
+        //         //this.setChunks.add(chunks.toString());
+        //         this.chunks.clear();
+        //     }
+        // }
+
         update=setChunks.toString();
+        // update=chunks.toString();
         setChunks.clear();
 
         return update;

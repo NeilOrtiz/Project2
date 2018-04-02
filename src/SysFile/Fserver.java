@@ -43,8 +43,8 @@ public class Fserver {
     public void newMsgMserver(String msg){
         String requestType,fileName;
 
-        requestType=msg.split(",")[2];
-        fileName=msg.split(",")[3];
+        requestType=msg.split(";")[2];
+        fileName=msg.split(";")[3];
 
         if (requestType.equals("creation")){
             this.newChunk(fileName);
@@ -56,12 +56,12 @@ public class Fserver {
     public void newMsgClient (String msg) {
         String requestType,fileName,appendSize,serverId,sourceId;
         int appended_size,destID;
-        sourceId=msg.split(",")[1];
+        sourceId=msg.split(";")[1];
         destID=Integer.parseInt(sourceId);
-        requestType=msg.split(",")[2];
-        fileName=msg.split(",")[3];
-        appendSize=msg.split(",")[5];
-        serverId=msg.split(",")[4];
+        requestType=msg.split(";")[2];
+        fileName=msg.split(";")[3];
+        appendSize=msg.split(";")[5];
+        serverId=msg.split(";")[4];
         appended_size=Integer.parseInt(appendSize);
 
         if (requestType.equals("append")){
@@ -70,9 +70,9 @@ public class Fserver {
             // Notification to Client
 
             if (success){
-                msg=dad.typeHost+","+dad.myID+","+"successAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+                msg=dad.typeHost+";"+dad.myID+";"+"successAppend"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             } else {
-                msg=dad.typeHost+","+dad.myID+","+"failedAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+                msg=dad.typeHost+";"+dad.myID+";"+"failedAppend"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             }
             sender.sendMessage(msg, cH.peers_listen, destID);
         }

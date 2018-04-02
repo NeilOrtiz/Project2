@@ -27,28 +27,33 @@ public class Mserver {
         String requestType,fileName,appendSize;
         int serverId,destID;
 
-        requestType=msg.split(",")[2];
-        fileName=msg.split(",")[3];
+        requestType=msg.split(";")[2];
+        fileName=msg.split(";")[3];
 
 
         if (requestType.equals("creation")){
             //Select random Fserver. Get dstID
             serverId=this.randomFserver();
-            msg=dad.typeHost+","+dad.myID+","+"creation"+","+fileName+","+serverId+","+0+","+0;
+            msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+fileName+";"+serverId+";"+0+";"+0;
 
             // send request to Fserver
             sender.sendMessage(msg, cH.peers_listen, serverId);
         } else if (requestType.equals("append")) {
-            destID=Integer.parseInt( msg.split(",")[1]); // Get Client ID who sent the request
-            appendSize=msg.split(",")[5];
+            destID=Integer.parseInt( msg.split(";")[1]); // Get Client ID who sent the request
+            appendSize=msg.split(";")[5];
             serverId=checkFserver(fileName);
-            msg=dad.typeHost+","+dad.myID+","+"AnswerAppend"+","+fileName+","+serverId+","+appendSize+","+0;
+            msg=dad.typeHost+";"+dad.myID+";"+"AnswerAppend"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
         }
     }
 
     public void newMsgFserver(String msg){
-        //TODO: Mserver.newMsgFserver()
+        String requestType;
+        requestType=msg.split(";")[2];
+
+        if (requestType.equals("hb")) {
+            this.update(msg);
+        }
     }
 
     public int randomFserver(){
@@ -72,5 +77,23 @@ public class Mserver {
 
         return serverId;
 
+    }
+
+    public void update(String msg) {
+        String datas,serverId;
+
+        datas=msg.split(";")[3];
+        serverId=msg.split(";")[1];
+        
+        // conver datas from string to arrayList
+
+        // for (String data:datas) {
+
+        // }
+
+    }
+
+    public void checkMeta(String datas) {
+        //TODO: Mserver.checkMeta()
     }
 }

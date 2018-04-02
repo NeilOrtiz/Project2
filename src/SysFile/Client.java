@@ -50,7 +50,7 @@ public class Client {
                         System.out.println("Creating");
                         System.out.println();
                         newFileName=console.readLine("Enter new File Name: ");
-                        msg=dad.typeHost+","+dad.myID+","+"creation"+","+newFileName;
+                        msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
                         sender.sendMessage(msg, cH.peers_listen, 10);
                         break;
 
@@ -64,7 +64,7 @@ public class Client {
                         System.out.println();
                         newFileName=console.readLine("Enter new File Name: ");
                         appendSize=console.readLine("Enter append size: ");
-                        msg=dad.typeHost+","+dad.myID+","+"append"+","+newFileName+","+0+","+appendSize+","+0;
+                        msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+newFileName+";"+0+";"+appendSize+";"+0;
                         sender.sendMessage(msg, cH.peers_listen, 10);
                         break;
 
@@ -86,15 +86,15 @@ public class Client {
     public void newMsgMserver(String msg) {
         String requestType,fileName,serverId,appendSize;
         int destID;
-        requestType=msg.split(",")[2];
-        fileName=msg.split(",")[3];
-        serverId=msg.split(",")[4];
+        requestType=msg.split(";")[2];
+        fileName=msg.split(";")[3];
+        serverId=msg.split(";")[4];
         destID=Integer.parseInt(serverId);
-        appendSize=msg.split(",")[5];
+        appendSize=msg.split(";")[5];
 
         if (requestType.equals("AnswerAppend")) {
             System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
-            msg=dad.typeHost+","+dad.myID+","+"append"+","+fileName+","+serverId+","+appendSize+","+0;
+            msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
         }
 
@@ -103,9 +103,9 @@ public class Client {
     public void newMsgFserver(String msg) {
         String requestType,fileName,appendSize;
 
-        requestType=msg.split(",")[2];
-        fileName=msg.split(",")[3];
-        appendSize=msg.split(",")[5];
+        requestType=msg.split(";")[2];
+        fileName=msg.split(";")[3];
+        appendSize=msg.split(";")[5];
 
         if (requestType.equals("successAppend")) {
             System.out.println("[NOTI] "+appendSize+" bytes has been append in "+fileName+".");
