@@ -19,7 +19,6 @@ public class Client {
     }
     public void execute() {
 
-        System.out.println("********** Executando desde Client.java -***********");
         Scanner choice = new Scanner(System.in);
         Console console = System.console();
         String newFileName,appendSize; 
