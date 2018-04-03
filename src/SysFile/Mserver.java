@@ -1,9 +1,11 @@
 package SysFile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 
 import java.util.Random;
+import java.util.Set;
 
 public class Mserver {
     private Parent dad;
@@ -92,13 +94,13 @@ public class Mserver {
 
         for (String dt:data) {
                 fileName=dt.split("_")[0];
-                System.out.println("fileName: "+fileName);
+                // System.out.println("fileName: "+fileName);
                 time=dt.split("-")[1];
-                System.out.println("time: "+time);
+                // System.out.println("time: "+time);
                 chunkNs=dt.split("_")[2];
                 chunkNs=chunkNs.split("\\.")[0];
                 chunkN=Integer.parseInt(chunkNs);
-                System.out.println("chunkN: "+chunkN);
+                // System.out.println("chunkN: "+chunkN);
 
                 this.checkMeta(fileName, time, chunkN,serverId);
         }
@@ -110,8 +112,10 @@ public class Mserver {
         int metachunkN, metaTime;
         ArrayList<String> dataFile= new ArrayList<String>();
 
+        System.out.println("[checkMeta3] Existe el fileName: "+this.metadata.contains(fileName));
         if (this.metadata.contains(fileName)) {
             dataFile=this.metadata.get(fileName);
+            System.out.println("[checkMeta2] dataFile: "+dataFile);
             metachunkN=Integer.parseInt(dataFile.get(0));
             metaTime=Integer.parseInt(dataFile.get(1));
 
@@ -121,21 +125,21 @@ public class Mserver {
                     value=serverId+"-"+time;
                     dataFile.add(chunkN, value);
                     this.metadata.put(fileName, dataFile);
-                    dataFile.clear();
+                    //dataFile.clear();
                 }
 
             } else {
                 value=serverId+"-"+time;
                 dataFile.add(chunkN, value);
                 this.metadata.put(fileName, dataFile);
-                dataFile.clear();
+                //dataFile.clear();
                 
             }
 
         } else {
             value=serverId+"-"+time;
-            System.out.println("[checkMeta] value: "+value);
-            System.out.println("[checkMeta] chunkN: "+chunkN);
+            // System.out.println("[checkMeta] value: "+value);
+            // System.out.println("[checkMeta] chunkN: "+chunkN);
 
             for (int i=0;i<=5;i++){
                 dataFile.add(i, null);
@@ -144,8 +148,12 @@ public class Mserver {
             dataFile.add(chunkN, value);
             
             this.metadata.put(fileName, dataFile);
-            dataFile.clear();
+            //System.out.println("[checkMeta] key: "+fileName+", value: "+this.metadata.get(fileName));
+            //dataFile.clear();
         }
+        this.metadataStatus();
+
+
     }
 
     public ArrayList<String> procesDatas(String datas){
@@ -159,5 +167,22 @@ public class Mserver {
             result.add(n1);
         }
         return result;
+    }
+
+    public void metadataStatus(){
+        Set<String> keys=this.metadata.keySet();
+        System.out.println("Metadata size: "+this.metadata.size());
+
+        for (String key:keys){
+            Collection<ArrayList<String>> values = this.metadata.values();
+            System.out.println("Metadata FileName: "+key+", value: "+this.metadata.get(key));
+            // for (ArrayList<String> value:values){
+            //     System.out.println("Metadata FileName: "+key+", value: "+value);
+            // }
+        }
+
+        
+
+
     }
 }
