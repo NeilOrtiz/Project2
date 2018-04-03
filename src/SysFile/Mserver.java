@@ -90,11 +90,6 @@ public class Mserver {
         data=this.procesDatas(datas);
         
 
-    //     for (String dt:data) {
-    //         System.out.println("---------*****-------- "+dt);
-            
-    // }
-
         for (String dt:data) {
                 fileName=dt.split("_")[0];
                 System.out.println("fileName: "+fileName);
@@ -142,12 +137,11 @@ public class Mserver {
             System.out.println("[checkMeta] value: "+value);
             System.out.println("[checkMeta] chunkN: "+chunkN);
 
-            try {
-                dataFile.add(chunkN, value);
-            } catch (IndexOutOfBoundsException ex) {
-
+            for (int i=0;i<=5;i++){
+                dataFile.add(i, null);
             }
 
+            dataFile.add(chunkN, value);
             
             this.metadata.put(fileName, dataFile);
             dataFile.clear();
