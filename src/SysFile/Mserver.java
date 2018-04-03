@@ -11,15 +11,12 @@ public class Mserver {
     private Parent dad;
     private CommunicationHandler cH;
     private Sender sender ;
-    private Hashtable<String,ArrayList<String>> metadata;
     
 
     public Mserver(Parent dad, CommunicationHandler cH){
         this.dad=dad;
         this.cH=cH;
         this.sender= new Sender();
-        this.metadata=new Hashtable<String,ArrayList<String> >();
-        
     }
 
     public void execute(){
@@ -110,10 +107,10 @@ public class Mserver {
     public void checkMeta(String fileName,String time,int chunkN, String serverId) {
         String value;
         int metachunkN, metaTime;
-        ArrayList<String> dataFile= new ArrayList<String>();
+        ArrayList<String> dataFile= new ArrayList<String>(); 
 
-        System.out.println("[checkMeta3] Existe el fileName: "+this.metadata.contains(fileName));
-        if (this.metadata.contains(fileName)) {
+        System.out.println("[checkMeta3] Existe el fileName: "+dad.metadata.contains(fileName));
+        if (dad.metadata.contains(fileName)) {
             dataFile=this.metadata.get(fileName);
             System.out.println("[checkMeta2] dataFile: "+dataFile);
             metachunkN=Integer.parseInt(dataFile.get(0));

@@ -1,6 +1,8 @@
 package SysFile;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Parent {
 
@@ -8,12 +10,14 @@ public class Parent {
     public String typeHost;
     public boolean listening;
     public File folder;
+    private Hashtable<String,ArrayList<String>> metadata;
 
     public Parent(int myID,String typeHost) {
         this.myID=myID;
         this.typeHost=typeHost;
         this.listening=true;
         this.folder=null;
+        this.metadata=new Hashtable<String,ArrayList<String>>();
     }
 
     public static void main (String[] args) {
@@ -30,6 +34,8 @@ public class Parent {
         
         
         if (args[1].equals("M")) {
+            //Hashtable<String,ArrayList<String>> metadata=new Hashtable<String,ArrayList<String> >();
+
             Mserver mserver=new Mserver(dad,cH);
 
             boolean success= cH.estComm(typeHost);
