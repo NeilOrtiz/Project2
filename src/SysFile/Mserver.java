@@ -139,7 +139,16 @@ public class Mserver {
 
         } else {
             value=serverId+"-"+time;
-            dataFile.add(chunkN, value);
+            System.out.println("[checkMeta] value: "+value);
+            System.out.println("[checkMeta] chunkN: "+chunkN);
+
+            try {
+                dataFile.add(chunkN, value);
+            } catch (IndexOutOfBoundsException ex) {
+
+            }
+
+            
             this.metadata.put(fileName, dataFile);
             dataFile.clear();
         }
