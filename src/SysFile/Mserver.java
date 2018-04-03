@@ -2,20 +2,21 @@ package SysFile;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+
 import java.util.Random;
 
 public class Mserver {
     private Parent dad;
     private CommunicationHandler cH;
     private Sender sender ;
-    private Hashtable metadata;
+    private Hashtable<String,ArrayList<String>> metadata;
     
 
     public Mserver(Parent dad, CommunicationHandler cH){
         this.dad=dad;
         this.cH=cH;
         this.sender= new Sender();
-        this.metadata=new Hashtable<String,ArrayList<String>>();
+        this.metadata=new Hashtable<String,ArrayList<String> >();
         
     }
 
@@ -80,20 +81,80 @@ public class Mserver {
     }
 
     public void update(String msg) {
-        String datas,serverId;
+        String datas,serverId,fileName,time,chunkNs;
+        ArrayList<String> data;
+        int chunkN;
 
         datas=msg.split(";")[3];
         serverId=msg.split(";")[1];
+        data=this.procesDatas(datas);
         
-        // conver datas from string to arrayList
 
-        // for (String data:datas) {
+    //     for (String dt:data) {
+    //         System.out.println("---------*****-------- "+dt);
+            
+    // }
 
-        // }
+        for (String dt:data) {
+                fileName=dt.split("_")[0];
+                System.out.println("fileName: "+fileName);
+                time=dt.split("-")[1];
+                System.out.println("time: "+time);
+                chunkNs=dt.split("_")[2];
+                chunkNs=chunkNs.split("\\.")[0];
+                chunkN=Integer.parseInt(chunkNs);
+                System.out.println("chunkN: "+chunkN);
+
+                this.checkMeta(fileName, time, chunkN,serverId);
+        }
 
     }
 
-    public void checkMeta(String datas) {
-        //TODO: Mserver.checkMeta()
+    public void checkMeta(String fileName,String time,int chunkN, String serverId) {
+        String value;
+        int metachunkN, metaTime;
+        ArrayList<String> dataFile= new ArrayList<String>();
+
+        if (this.metadata.contains(fileName)) {
+            dataFile=this.metadata.get(fileName);
+            metachunkN=Integer.parseInt(dataFile.get(0));
+            metaTime=Integer.parseInt(dataFile.get(1));
+
+            if (metachunkN==chunkN) {
+                if (metaTime==Integer.parseInt(time)) {
+                    dataFile.remove(chunkN);
+                    value=serverId+"-"+time;
+                    dataFile.add(chunkN, value);
+                    this.metadata.put(fileName, dataFile);
+                    dataFile.clear();
+                }
+
+            } else {
+                value=serverId+"-"+time;
+                dataFile.add(chunkN, value);
+                this.metadata.put(fileName, dataFile);
+                dataFile.clear();
+                
+            }
+
+        } else {
+            value=serverId+"-"+time;
+            dataFile.add(chunkN, value);
+            this.metadata.put(fileName, dataFile);
+            dataFile.clear();
+        }
+    }
+
+    public ArrayList<String> procesDatas(String datas){
+        ArrayList<String> result = new ArrayList<String>();
+        String[] data=datas.split(",");
+        for (String nx:data) {
+            String n1=nx.split("]",1)[0];
+			n1=n1.replaceAll("]", "");
+			n1=n1.replaceAll("\\[", "");
+            n1=n1.replaceAll("\\s+", "");
+            result.add(n1);
+        }
+        return result;
     }
 }

@@ -61,22 +61,22 @@ public class HeartBeat extends Thread {
         String update=null;
         File[] filesFolder = folder.listFiles();
 
+        // for (File file:filesFolder) {
+        //     if (file.isFile()) {
+        //         this.chunks.add(file.getName());
+        //         this.chunks.add(String.valueOf(file.lastModified()));
+        //         this.setChunks.add(chunks.toString());
+        //         this.chunks.clear();
+        //     }
+        // }
+
         for (File file:filesFolder) {
             if (file.isFile()) {
-                this.chunks.add(file.getName());
-                this.chunks.add(String.valueOf(file.lastModified()));
+                this.chunks.add(file.getName()+"-"+String.valueOf(file.lastModified()));
                 this.setChunks.add(chunks.toString());
                 this.chunks.clear();
             }
         }
-
-        // for (File file:filesFolder) {
-        //     if (file.isFile()) {
-        //         this.chunks.add(file.getName()+"-"+String.valueOf(file.lastModified()));
-        //         //this.setChunks.add(chunks.toString());
-        //         this.chunks.clear();
-        //     }
-        // }
 
         update=setChunks.toString();
         // update=chunks.toString();
