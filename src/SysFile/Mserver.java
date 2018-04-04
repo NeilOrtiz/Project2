@@ -100,7 +100,8 @@ public class Mserver {
                 // System.out.println("chunkN: "+chunkN);
                 
                 dad.mutex1.lock();
-                dad.checkMeta(fileName, time, chunkN,serverId);
+                // dad.checkMeta(fileName, time, chunkN,serverId);
+                this.checkMeta(fileName, time, chunkN,serverId);
                 dad.mutex1.unlock();
         }
 
@@ -117,6 +118,57 @@ public class Mserver {
             result.add(n1);
         }
         return result;
+    }
+
+    public void checkMeta(String fileName,String time,int chunkN, String serverId) {
+        String value;
+        int metachunkN;
+        long metaTime;
+        ArrayList<String> dataFile= new ArrayList<String>(); 
+
+        //System.out.println("[checkMeta3] Existe el fileName: "+fileName+", "+dad.metadata.containsKey(fileName));
+        if (dad.metadata.containsKey(fileName)) {
+            dataFile=dad.metadata.get(fileName);
+            //System.out.println("[checkMeta2] dataFile: "+dataFile);
+            int counter=0;
+            int temp=100;
+            value=serverId+"-"+time;
+            for (String dF:dataFile) {
+                //System.out.println("[checkMeta3] dF: "+dF);
+                if ((counter==chunkN)) {
+                    if (!dF.equals("null")) {
+                        metaTime=Long.parseLong(dF.split("-")[1]);
+                        if (Long.parseLong(time)>metaTime) {
+                            temp=counter;
+                        }
+                    } else {
+                        temp=counter;
+                    }
+                } 
+                counter++; 
+            }
+            if (temp!=100){
+                dataFile.set(temp, value);
+            }
+        } else {
+            value=serverId+"-"+time;
+            for (int i=0;i<=5;i++){
+                dataFile.add(i, "null");
+            }
+            dataFile.add(chunkN, value);
+            dad.metadata.put(fileName, dataFile);
+        }
+        this.metadataStatus();
+    }
+
+    public void metadataStatus(){
+        Set<String> keys=dad.metadata.keySet();
+        System.out.println("-------- METADATA --------------");
+        System.out.println("Metadata size: "+dad.metadata.size());
+        for (String key:keys){
+            System.out.println("Metadata FileName: "+key+", value: "+dad.metadata.get(key));
+        }
+        System.out.println("------------------------------------");
     }
 
 }
