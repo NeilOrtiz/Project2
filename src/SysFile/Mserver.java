@@ -1,8 +1,6 @@
 package SysFile;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
 
 import java.util.Random;
 import java.util.Set;
@@ -70,10 +68,23 @@ public class Mserver {
     }
 
     public int checkFserver(String fileName){
-        int serverId;
+        int serverId=-1;
+        ArrayList<String> dataFile= new ArrayList<String>();
 
-        //TODO: Mserver.checkFserver()
-        serverId=13;
+        if (dad.metadata.containsKey(fileName)) {
+            dataFile=dad.metadata.get(fileName);
+            for (String dF:dataFile) {
+                if (!dF.equals("null")) {
+                    serverId=Integer.parseInt(dF.split("-")[0]);
+                }
+
+            }
+
+        } else {
+            System.err.println("[ERROR] File "+fileName+" doesn't exist");
+            //return -1;
+        }
+
 
         return serverId;
 
@@ -122,7 +133,6 @@ public class Mserver {
 
     public void checkMeta(String fileName,String time,int chunkN, String serverId) {
         String value;
-        int metachunkN;
         long metaTime;
         ArrayList<String> dataFile= new ArrayList<String>(); 
 
@@ -158,7 +168,7 @@ public class Mserver {
             dataFile.add(chunkN, value);
             dad.metadata.put(fileName, dataFile);
         }
-        this.metadataStatus();
+        //this.metadataStatus();
     }
 
     public void metadataStatus(){

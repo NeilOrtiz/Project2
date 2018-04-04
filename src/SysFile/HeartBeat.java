@@ -6,7 +6,6 @@ import java.util.List;
 
 public class HeartBeat extends Thread {
 
-    private int myID;
     private Parent dad;
     private Sender sender ;
     private CommunicationHandler cH;
@@ -14,10 +13,9 @@ public class HeartBeat extends Thread {
     private List<String> setChunks;
     private List<String> chunks;
 
-    public HeartBeat (int myID,Parent dad, CommunicationHandler cH,File folder) {
+    public HeartBeat (Parent dad, CommunicationHandler cH,File folder) {
         super("Receiver");
         this.dad=dad;
-        this.myID=myID;
         this.sender= new Sender();
         this.cH=cH;
         this.folder=folder;

@@ -20,7 +20,7 @@ public class Fserver {
 
     public void execute(){
         //HearBeat
-        HeartBeat heart = new HeartBeat(dad.myID,dad,cH,dad.folder);
+        HeartBeat heart = new HeartBeat(dad,cH,dad.folder);
         heart.start();
     }
 
