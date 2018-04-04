@@ -18,7 +18,6 @@ public class CommunicationHandler {
     public Hashtable<Integer,PrintWriter> peers_listen;// Hash table that contains writeSockets
     public int numberconneEspect;
     public Hashtable<Integer,Socket> sockets_ht;
-
     public Mserver mserver;
 
 

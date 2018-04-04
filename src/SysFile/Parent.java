@@ -2,7 +2,12 @@ package SysFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Parent {
 
@@ -11,6 +16,7 @@ public class Parent {
     public boolean listening;
     public File folder;
     private Hashtable<String,ArrayList<String>> metadata;
+    public  Lock mutex1;
 
     public Parent(int myID,String typeHost) {
         this.myID=myID;
@@ -18,6 +24,7 @@ public class Parent {
         this.listening=true;
         this.folder=null;
         this.metadata=new Hashtable<String,ArrayList<String>>();
+        this.mutex1=new ReentrantLock(true);
     }
 
     public static void main (String[] args) {
@@ -32,7 +39,6 @@ public class Parent {
         Parent dad = new Parent(myID,typeHost);
         CommunicationHandler cH=new CommunicationHandler(dad, myID);
         
-        
         if (args[1].equals("M")) {
             //Hashtable<String,ArrayList<String>> metadata=new Hashtable<String,ArrayList<String> >();
 
@@ -44,7 +50,6 @@ public class Parent {
             }
 
             mserver.execute();
-
 
         } else if (args[1].equals("s")) {
 
@@ -109,5 +114,148 @@ public class Parent {
                 break;
         }
 
+    }
+
+    public void checkMeta(String fileName,String time,int chunkN, String serverId) {
+        String value;
+        int metachunkN;
+        long metaTime;
+        ArrayList<String> dataFile= new ArrayList<String>(); 
+
+        System.out.println("[checkMeta3] Existe el fileName: "+fileName+", "+this.metadata.containsKey(fileName));
+        if (this.metadata.containsKey(fileName)) {
+            dataFile=this.metadata.get(fileName);
+            System.out.println("[checkMeta2] dataFile: "+dataFile);
+            //metachunkN=Integer.parseInt(dataFile.get(0));
+            //metaTime=Integer.parseInt(dataFile.get(1));
+            int counter=0;
+
+            // Iterator<String> iter = dataFile.iterator();
+            // while (iter.hasNext()) {
+            //     String str = iter.next();
+            //     if ((counter==chunkN)) {
+            //         if (!str.equals("null")) {
+            //             metaTime=Integer.parseInt(str.split("-")[0]);
+            //             if (Integer.parseInt(time)>metaTime) {
+            //                 //reemplazar valor
+            //                 value=serverId+"-"+time;
+            //                 dataFile.set(counter, value);
+            //             }
+            //         } else {
+            //             value=serverId+"-"+time;
+            //             dataFile.add(counter, value);
+            //         }
+            //     } 
+            //     counter++;
+            // }
+
+            // ArrayList<String> toRemove = new ArrayList<String>();
+            // value=serverId+"-"+time;
+            // for (String dF:dataFile) {
+            //     if ((counter==chunkN)) {
+            //         if (!dF.equals("null")) {
+            //             metaTime=Integer.parseInt(dF.split("-")[0]);
+            //             if (Integer.parseInt(time)>metaTime) {
+            //                 //reemplazar valor
+            //                 //value=serverId+"-"+time;
+            //                // dataFile.add(counter, value);
+            //                 toRemove.add(dF);
+            //             }
+            //         } else {
+            //             //value=serverId+"-"+time;
+            //             //dataFile.add(counter, value);
+            //         }
+            //     } 
+            //     counter++; 
+            // }
+            // dataFile.removeAll(toRemove);
+            // dataFile.add(counter, value);
+
+            // for (String dF:dataFile) {
+            //     if ((counter==chunkN)) {
+            //         if (!dF.equals("null")) {
+            //             metaTime=Integer.parseInt(dF.split("-")[0]);
+            //             if (Integer.parseInt(time)>metaTime) {
+            //                 //reemplazar valor
+            //                 value=serverId+"-"+time;
+            //                 dataFile.set(counter, value);
+            //             }
+            //         } else {
+            //             value=serverId+"-"+time;
+            //             dataFile.add(counter, value);
+            //         }
+            //     } 
+            //     counter++; 
+            // }
+            int temp=100;
+            value=serverId+"-"+time;
+            for (String dF:dataFile) {
+                System.out.println("[checkMeta3] dF: "+dF);
+                if ((counter==chunkN)) {
+                    if (!dF.equals("null")) {
+                        metaTime=Long.parseLong(dF.split("-")[1]);
+                        if (Long.parseLong(time)>metaTime) {
+                            //reemplazar valor
+                            temp=counter;
+                        }
+                    } else {
+                        temp=counter;
+                        //dataFile.add(counter, value);
+                    }
+                } 
+                counter++; 
+            }
+            if (temp!=100){
+                dataFile.set(temp, value);
+            }
+            
+            
+
+            // if (metachunkN==chunkN) {
+            //     if (metaTime==Integer.parseInt(time)) {
+            //         dataFile.remove(chunkN);
+            //         value=serverId+"-"+time;
+            //         dataFile.add(chunkN, value);
+            //         this.metadata.put(fileName, dataFile);
+            //         //dataFile.clear();
+            //     }
+
+            // } else {
+            //     value=serverId+"-"+time;
+            //     dataFile.add(chunkN, value);
+            //     this.metadata.put(fileName, dataFile);
+            //     //dataFile.clear();
+                
+            // }
+
+        } else {
+            value=serverId+"-"+time;
+            // System.out.println("[checkMeta] value: "+value);
+            // System.out.println("[checkMeta] chunkN: "+chunkN);
+
+            for (int i=0;i<=5;i++){
+                dataFile.add(i, "null");
+            }
+
+            dataFile.add(chunkN, value);
+            
+            this.metadata.put(fileName, dataFile);
+            //System.out.println("[checkMeta] key: "+fileName+", value: "+this.metadata.get(fileName));
+            //dataFile.clear();
+        }
+        this.metadataStatus();
+    }
+
+    public void metadataStatus(){
+        Set<String> keys=this.metadata.keySet();
+        System.out.println("Metadata size: "+this.metadata.size());
+
+        for (String key:keys){
+            Collection<ArrayList<String>> values = this.metadata.values();
+            System.out.println("Metadata FileName: "+key+", value: "+this.metadata.get(key));
+            // for (ArrayList<String> value:values){
+            //     System.out.println("Metadata FileName: "+key+", value: "+value);
+            // }
+        }
     }
 } 
