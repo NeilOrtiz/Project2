@@ -6,7 +6,6 @@ import java.util.List;
 
 public class HeartBeat extends Thread {
 
-    private int myID;
     private Parent dad;
     private Sender sender ;
     private CommunicationHandler cH;
@@ -14,10 +13,9 @@ public class HeartBeat extends Thread {
     private List<String> setChunks;
     private List<String> chunks;
 
-    public HeartBeat (int myID,Parent dad, CommunicationHandler cH,File folder) {
+    public HeartBeat (Parent dad, CommunicationHandler cH,File folder) {
         super("Receiver");
         this.dad=dad;
-        this.myID=myID;
         this.sender= new Sender();
         this.cH=cH;
         this.folder=folder;
@@ -51,8 +49,8 @@ public class HeartBeat extends Thread {
     public String generateMsg(File folder){
 
         String datas=this.enquiry(folder);
-
-        String msg=this.myID+","+"hb"+","+datas;
+        String msg=dad.typeHost+";"+dad.myID+";"+"hb"+";"+datas;
+        //String msg=this.myID+";"+"hb"+";"+datas;
 
         return msg;
     }
@@ -61,16 +59,25 @@ public class HeartBeat extends Thread {
         String update=null;
         File[] filesFolder = folder.listFiles();
 
+        // for (File file:filesFolder) {
+        //     if (file.isFile()) {
+        //         this.chunks.add(file.getName());
+        //         this.chunks.add(String.valueOf(file.lastModified()));
+        //         this.setChunks.add(chunks.toString());
+        //         this.chunks.clear();
+        //     }
+        // }
+
         for (File file:filesFolder) {
             if (file.isFile()) {
-                this.chunks.add(file.getName());
-                this.chunks.add(String.valueOf(file.lastModified()));
+                this.chunks.add(file.getName()+"-"+String.valueOf(file.lastModified()));
                 this.setChunks.add(chunks.toString());
                 this.chunks.clear();
             }
         }
 
         update=setChunks.toString();
+        // update=chunks.toString();
         setChunks.clear();
 
         return update;

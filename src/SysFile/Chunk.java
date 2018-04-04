@@ -139,8 +139,9 @@ public class Chunk {
 		File f = new File(pathFile);
 		File[] filesFolder= f.listFiles();
 
+		
 		for (File file:filesFolder) {
-			if (file.isFile()) {
+			if (file.isFile() && !found) {
 				if (file.getName().split("_")[0].equals(fileName2)){
 					found=true;
 					int lastC=this.lastChunk(fileName, pathFile);
@@ -170,10 +171,9 @@ public class Chunk {
 			long S=f.length();
 			int tempo=(int) S;
 			int diference=MAX_LENGTH-tempo;
-		
-			if ((diference)<appended_size) {
-				//Refill last chunk with null
 
+			if ( (diference > 0) && (diference < appended_size)  ) {
+				//Refill last chunk with null
 				byte[] bytesNull = new byte[diference];
 				
 				if (f.exists()){
@@ -189,11 +189,10 @@ public class Chunk {
 					System.err.println("[ERROR] File not exist. No possible to append");
 					sucess=false;
 				}
-
-
 				// Create new Chunk
 				this.create(pathFile, fileName2, appended_size);
-			} else {
+
+			} else if ((diference > 0) && (diference > appended_size)  ) {
 				// Creating ramdon bytes
 				byte[] bytes = new byte[appended_size];
 				try {
@@ -213,6 +212,9 @@ public class Chunk {
 					System.out.println("[ERROR] File no exist. No possible to append");
 					sucess=false;
 				}
+			} else {
+				this.create(pathFile, fileName2, appended_size);
+				sucess=true;
 			}
 		} else {
 			System.err.println("[ERROR] Size file bigger than 8192 bytes");

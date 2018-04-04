@@ -1,6 +1,10 @@
 package SysFile;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Parent {
 
@@ -8,12 +12,16 @@ public class Parent {
     public String typeHost;
     public boolean listening;
     public File folder;
+    public Hashtable<String,ArrayList<String>> metadata;
+    public  Lock mutex1;
 
     public Parent(int myID,String typeHost) {
         this.myID=myID;
         this.typeHost=typeHost;
         this.listening=true;
         this.folder=null;
+        this.metadata=new Hashtable<String,ArrayList<String>>();
+        this.mutex1=new ReentrantLock(true);
     }
 
     public static void main (String[] args) {
@@ -28,8 +36,9 @@ public class Parent {
         Parent dad = new Parent(myID,typeHost);
         CommunicationHandler cH=new CommunicationHandler(dad, myID);
         
-        
         if (args[1].equals("M")) {
+            //Hashtable<String,ArrayList<String>> metadata=new Hashtable<String,ArrayList<String> >();
+
             Mserver mserver=new Mserver(dad,cH);
 
             boolean success= cH.estComm(typeHost);
@@ -38,7 +47,6 @@ public class Parent {
             }
 
             mserver.execute();
-
 
         } else if (args[1].equals("s")) {
 
@@ -104,4 +112,55 @@ public class Parent {
         }
 
     }
+
+    // public void checkMeta(String fileName,String time,int chunkN, String serverId) {
+    //     String value;
+    //     int metachunkN;
+    //     long metaTime;
+    //     ArrayList<String> dataFile= new ArrayList<String>(); 
+
+    //     //System.out.println("[checkMeta3] Existe el fileName: "+fileName+", "+this.metadata.containsKey(fileName));
+    //     if (this.metadata.containsKey(fileName)) {
+    //         dataFile=this.metadata.get(fileName);
+    //         //System.out.println("[checkMeta2] dataFile: "+dataFile);
+    //         int counter=0;
+    //         int temp=100;
+    //         value=serverId+"-"+time;
+    //         for (String dF:dataFile) {
+    //             //System.out.println("[checkMeta3] dF: "+dF);
+    //             if ((counter==chunkN)) {
+    //                 if (!dF.equals("null")) {
+    //                     metaTime=Long.parseLong(dF.split("-")[1]);
+    //                     if (Long.parseLong(time)>metaTime) {
+    //                         temp=counter;
+    //                     }
+    //                 } else {
+    //                     temp=counter;
+    //                 }
+    //             } 
+    //             counter++; 
+    //         }
+    //         if (temp!=100){
+    //             dataFile.set(temp, value);
+    //         }
+    //     } else {
+    //         value=serverId+"-"+time;
+    //         for (int i=0;i<=5;i++){
+    //             dataFile.add(i, "null");
+    //         }
+    //         dataFile.add(chunkN, value);
+    //         this.metadata.put(fileName, dataFile);
+    //     }
+    //     //this.metadataStatus();
+    // }
+
+    // public void metadataStatus(){
+    //     Set<String> keys=this.metadata.keySet();
+    //     System.out.println("-------- METADATA --------------");
+    //     System.out.println("Metadata size: "+this.metadata.size());
+    //     for (String key:keys){
+    //         System.out.println("Metadata FileName: "+key+", value: "+this.metadata.get(key));
+    //     }
+    //     System.out.println("------------------------------------");
+    // }
 } 

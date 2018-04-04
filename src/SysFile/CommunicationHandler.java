@@ -18,6 +18,7 @@ public class CommunicationHandler {
     public Hashtable<Integer,PrintWriter> peers_listen;// Hash table that contains writeSockets
     public int numberconneEspect;
     public Hashtable<Integer,Socket> sockets_ht;
+    public Mserver mserver;
 
 
     public CommunicationHandler(Parent dad, int myID) {
@@ -29,6 +30,7 @@ public class CommunicationHandler {
         this.peers_listen=new Hashtable<Integer,PrintWriter>();
         this.numberconneEspect=0;
         this.sockets_ht=new Hashtable<Integer,Socket>();
+        this.mserver=new Mserver(dad, this);
     }
 
     public boolean estComm(String typeHost) {
@@ -197,7 +199,7 @@ public class CommunicationHandler {
     public void newMsgReceived(String msg){
         String sourceType;
 
-        sourceType=msg.split(",")[0];
+        sourceType=msg.split(";")[0];
 
         if (dad.typeHost.equals("c")){
             Client client=new Client(dad, this);
@@ -215,7 +217,7 @@ public class CommunicationHandler {
                 fserver.newMsgClient(msg);
             }
         } else {
-            Mserver mserver=new Mserver(dad, this);
+            //Mserver mserver=new Mserver(dad, this);
             if (sourceType.equals("c")) {
                 mserver.newMsgClient(msg);
             } else {
