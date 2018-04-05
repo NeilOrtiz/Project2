@@ -1,6 +1,7 @@
 package SysFile;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
@@ -91,10 +92,11 @@ public class Client {
     }
 
     public void newMsgMserver(String msg) {
-        String requestType,fileName,serverId,appendSize;
+        String requestType,fileName,serverId,appendSize,datas;
         int destID;
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
+        datas=msg.split(";")[3];
         serverId=msg.split(";")[4];
         destID=Integer.parseInt(serverId);
         appendSize=msg.split(";")[5];
@@ -103,8 +105,18 @@ public class Client {
             System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
             msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
-        }
+        } else if (requestType.equals("AnswerLs")) {
 
+            Mserver mserver=new Mserver(dad, cH);
+            ArrayList<String> result = new ArrayList<String>();
+            
+            result=mserver.procesDatas(datas);
+            
+            System.out.println("    -File list: ");
+            for (String key:result) {
+                System.out.println("        > "+key);
+            }
+        }
     }
 
     public void newMsgFserver(String msg) {
