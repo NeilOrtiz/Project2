@@ -27,7 +27,7 @@ public class Client {
 
             while (choiceEntry!=4) {
 
-                while (choiceEntry<1 || choiceEntry >4) {
+                while (choiceEntry<1 || choiceEntry >5) {
 
                     System.out.println("Enter one of the following commands:");
                     System.out.println("1 - Create");
@@ -39,7 +39,7 @@ public class Client {
                     if (choice.hasNextInt()) {
 
                         choiceEntry=choice.nextInt();
-                        if (choiceEntry<1 || choiceEntry >4) {
+                        if (choiceEntry<1 || choiceEntry >5) {
                             System.out.println("Invalidad input");
                         }
                         
@@ -77,7 +77,7 @@ public class Client {
                     
                     case 5:
                         System.out.println("Gathering information...");
-                        msg=dad.typeHost+";"+dad.myID+";"+"ls";
+                        msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
                         sender.sendMessage(msg, cH.peers_listen, 10);
                         break;
                     

@@ -42,6 +42,14 @@ public class Mserver {
             serverId=checkFserver(fileName);
             msg=dad.typeHost+";"+dad.myID+";"+"AnswerAppend"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
+        } else if (requestType.equals("ls")) {
+            destID=Integer.parseInt( msg.split(";")[1]); // Get Client ID who sent the request
+            String info;
+            info= this.query();
+            System.out.println("[newMsgClient] info: "+info);
+            msg=dad.typeHost+";"+dad.myID+";"+"AnswerLs"+";"+info+";"+0+";"+0+";"+0;
+            sender.sendMessage(msg, cH.peers_listen, destID);
+
         }
     }
 
@@ -179,6 +187,17 @@ public class Mserver {
             System.out.println("Metadata FileName: "+key+", value: "+dad.metadata.get(key));
         }
         System.out.println("------------------------------------");
+    }
+
+    public String query(){
+        String answer=null;
+        ArrayList<String> datas=new ArrayList<String>();
+        Set<String> keys=dad.metadata.keySet();
+        for (String key:keys) {
+            datas.add(key);
+        }
+        answer=datas.toString();
+        return answer;
     }
 
 }

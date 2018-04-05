@@ -217,7 +217,6 @@ public class CommunicationHandler {
                 fserver.newMsgClient(msg);
             }
         } else {
-            //Mserver mserver=new Mserver(dad, this);
             if (sourceType.equals("c")) {
                 mserver.newMsgClient(msg);
             } else {
