@@ -17,6 +17,7 @@ public class Client {
         this.cH=cH;
 
     }
+
     public void execute() {
 
         Scanner choice = new Scanner(System.in);
@@ -33,6 +34,7 @@ public class Client {
                     System.out.println("2 - Read");
                     System.out.println("3 - Append");
                     System.out.println("4 - Exit");
+                    System.out.println("5 - Query");
                     System.out.println();
                     if (choice.hasNextInt()) {
 
@@ -72,7 +74,13 @@ public class Client {
                         choice.close();
                         System.exit(1);
                         break;
-                
+                    
+                    case 5:
+                        System.out.println("Gathering information...");
+                        msg=dad.typeHost+";"+dad.myID+";"+"ls";
+                        sender.sendMessage(msg, cH.peers_listen, 10);
+                        break;
+                    
                     default:
                         break;
                 }

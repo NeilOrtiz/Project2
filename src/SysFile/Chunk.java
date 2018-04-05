@@ -221,7 +221,7 @@ public class Chunk {
 			System.exit(-1);
 			sucess=false;
 		}
-	return sucess;
+		return sucess;
 	}
 
 	public int lastChunk(String fileName,String pathFile){
@@ -254,7 +254,6 @@ public class Chunk {
 
 	public void read(String fileName,String pathFile, int startOffset, int endOffset) {
 		//TODO: Chunk.read()
-
 	}
 
 	public String lastChunkName(String fileName,String pathFile){
