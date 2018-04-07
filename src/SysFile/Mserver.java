@@ -170,7 +170,7 @@ public class Mserver {
             dataFile.add(chunkN, value);
             dad.metadata.put(fileName, dataFile);
         }
-        this.metadataStatus();
+        //this.metadataStatus();
     }
 
     public void metadataStatus(){
@@ -185,13 +185,24 @@ public class Mserver {
 
     public String query(){
         String answer=null;
+        String lenghtS;
+        Long lenght;
         ArrayList<String> datas=new ArrayList<String>();
         Set<String> keys=dad.metadata.keySet();
         for (String key:keys) {
-            datas.add(key);
+            datas=dad.metadata.get(key);
+            Long totalLenght=0L;
+            for (String value:datas) {
+                if (!value.equals("null")) {
+                    lenghtS=value.split("-")[2];
+                    lenght=Long.valueOf(lenghtS);
+                    totalLenght=totalLenght+lenght;
+                }
+                
+            }
+            System.out.println("[query] filename: "+key+" >totalLenght: "+totalLenght);
         }
         answer=datas.toString();
         return answer;
     }
-
 }

@@ -30,7 +30,7 @@ public class Receiver extends Thread {
                     msg =readSocket.readLine();
 
                     if (msg!=null){
-                        System.out.println("[INFO] Message received: "+msg);
+                        //System.out.println("[INFO] Message received: "+msg);
                         cH.newMsgReceived(msg);
                         counter=0;
                     } else {
