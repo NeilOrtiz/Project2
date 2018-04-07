@@ -99,7 +99,7 @@ public class Mserver {
     }
 
     public void update(String msg) {
-        String datas,serverId,fileName,time,chunkNs;
+        String datas,serverId,fileName,time,chunkNs,length;
         ArrayList<String> data;
         int chunkN;
 
@@ -110,17 +110,14 @@ public class Mserver {
 
         for (String dt:data) {
                 fileName=dt.split("_")[0];
-                // System.out.println("fileName: "+fileName);
                 time=dt.split("-")[1];
-                // System.out.println("time: "+time);
                 chunkNs=dt.split("_")[2];
                 chunkNs=chunkNs.split("\\.")[0];
                 chunkN=Integer.parseInt(chunkNs);
-                // System.out.println("chunkN: "+chunkN);
+                length=dt.split("-")[2];
                 
                 dad.mutex1.lock();
-                // dad.checkMeta(fileName, time, chunkN,serverId);
-                this.checkMeta(fileName, time, chunkN,serverId);
+                this.checkMeta(fileName, time, chunkN,serverId,length);
                 dad.mutex1.unlock();
         }
 
@@ -139,20 +136,17 @@ public class Mserver {
         return result;
     }
 
-    public void checkMeta(String fileName,String time,int chunkN, String serverId) {
+    public void checkMeta(String fileName,String time,int chunkN, String serverId,String length) {
         String value;
         long metaTime;
         ArrayList<String> dataFile= new ArrayList<String>(); 
 
-        //System.out.println("[checkMeta3] Existe el fileName: "+fileName+", "+dad.metadata.containsKey(fileName));
         if (dad.metadata.containsKey(fileName)) {
             dataFile=dad.metadata.get(fileName);
-            //System.out.println("[checkMeta2] dataFile: "+dataFile);
             int counter=0;
             int temp=100;
-            value=serverId+"-"+time;
+            value=serverId+"-"+time+"-"+length;
             for (String dF:dataFile) {
-                //System.out.println("[checkMeta3] dF: "+dF);
                 if ((counter==chunkN)) {
                     if (!dF.equals("null")) {
                         metaTime=Long.parseLong(dF.split("-")[1]);
@@ -169,14 +163,14 @@ public class Mserver {
                 dataFile.set(temp, value);
             }
         } else {
-            value=serverId+"-"+time;
+            value=serverId+"-"+time+"-"+length;
             for (int i=0;i<=5;i++){
                 dataFile.add(i, "null");
             }
             dataFile.add(chunkN, value);
             dad.metadata.put(fileName, dataFile);
         }
-        //this.metadataStatus();
+        this.metadataStatus();
     }
 
     public void metadataStatus(){
