@@ -114,7 +114,7 @@ public class Client {
             
             System.out.println("    -File list: ");
             for (String key:result) {
-                System.out.println("        > "+key);
+                System.out.println("        > "+key.split("-")[0]+": "+key.split("-")[1]+" bytes");
             }
         }
     }

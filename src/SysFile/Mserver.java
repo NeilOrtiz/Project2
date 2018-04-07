@@ -46,7 +46,6 @@ public class Mserver {
             destID=Integer.parseInt( msg.split(";")[1]); // Get Client ID who sent the request
             String info;
             info= this.query();
-            System.out.println("[newMsgClient] info: "+info);
             msg=dad.typeHost+";"+dad.myID+";"+"AnswerLs"+";"+info+";"+0+";"+0+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
 
@@ -188,6 +187,7 @@ public class Mserver {
         String lenghtS;
         Long lenght;
         ArrayList<String> datas=new ArrayList<String>();
+        ArrayList<String> info=new ArrayList<String>();
         Set<String> keys=dad.metadata.keySet();
         for (String key:keys) {
             datas=dad.metadata.get(key);
@@ -197,12 +197,11 @@ public class Mserver {
                     lenghtS=value.split("-")[2];
                     lenght=Long.valueOf(lenghtS);
                     totalLenght=totalLenght+lenght;
-                }
-                
+                } 
             }
-            System.out.println("[query] filename: "+key+" >totalLenght: "+totalLenght);
+            info.add(key+"-"+totalLenght);
         }
-        answer=datas.toString();
+        answer=info.toString();
         return answer;
     }
 }
