@@ -1,5 +1,7 @@
 package SysFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Fserver {
 
@@ -36,8 +38,10 @@ public class Fserver {
         chunk.create(dad.folder.getPath(), fileName, 0);
     }
 
-    public void readChunk(){
-        //TODO: Fserver.readChunk()
+    public ArrayList<String> readChunk(String chunkName, int startOffset, int endOffset) throws IOException{
+        ArrayList<String> reading = new ArrayList<String>();
+        reading = chunk.read(chunkName, dad.folder.getPath(), startOffset, endOffset);
+        return reading;
     }
 
     public void newMsgMserver(String msg){

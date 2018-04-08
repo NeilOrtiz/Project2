@@ -252,8 +252,37 @@ public class Chunk {
 		return temp;
 	}
 
-	public void read(String fileName,String pathFile, int startOffset, int endOffset) {
-		//TODO: Chunk.read()
+	public ArrayList<String> read(String fileName,String pathFile, int startOffset, int endOffset) throws IOException {
+		ArrayList<String> readArray = new ArrayList<String>();
+		String sourceFileName;
+
+		sourceFileName=pathFile+"\\"+fileName;
+
+		File file=null;
+		FileInputStream fileStream=new FileInputStream(file=new File(sourceFileName));
+
+		byte[] arr= new byte[(int)file.length()];
+
+		fileStream.read(arr,0,arr.length);
+
+		int counter=0;
+		for (int x:arr) {
+			
+			if ((counter>=startOffset)&&(counter<=endOffset)) {
+				readArray.add(Integer.toString(Math.abs(x)));
+				//System.out.print((char)Math.abs(x));
+			}
+			counter++;
+		}
+		//System.out.println("");
+		//System.out.println("readArray: "+readArray);
+		//System.out.println("---------------");
+		// for (String k:readArray) {
+		// 	System.out.println((char)Integer.parseInt(k));
+		// }
+		fileStream.close();
+
+		return readArray;
 	}
 
 	public String lastChunkName(String fileName,String pathFile){

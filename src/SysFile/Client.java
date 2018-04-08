@@ -23,7 +23,7 @@ public class Client {
 
         Scanner choice = new Scanner(System.in);
         Console console = System.console();
-        String newFileName,appendSize; 
+        String newFileName,appendSize,offset; 
             int choiceEntry=-1;
 
             while (choiceEntry!=4) {
@@ -58,6 +58,10 @@ public class Client {
 
                     case 2:
                         System.out.println("Reading");
+                        newFileName=console.readLine("Enter new File Name: ");
+                        offset=console.readLine("Enter append size: ");
+                        msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+newFileName+";"+0+";"+0+";"+offset;
+                        sender.sendMessage(msg, cH.peers_listen, 10);
                         System.out.println();
                         break;
 

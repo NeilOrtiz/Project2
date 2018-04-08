@@ -23,7 +23,7 @@ public class Mserver {
 
     public void newMsgClient(String msg){
         String requestType,fileName,appendSize;
-        int serverId,destID;
+        int serverId,destID,offset;
 
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
@@ -49,6 +49,14 @@ public class Mserver {
             msg=dad.typeHost+";"+dad.myID+";"+"AnswerLs"+";"+info+";"+0+";"+0+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
 
+        } else if (requestType.equals("read")) {
+            destID=Integer.parseInt( msg.split(";")[1]);
+            String info;
+            fileName=msg.split(";")[3];
+            offset=Integer.parseInt(msg.split(";")[6]);
+            info=this.queryChunk(fileName, offset);
+            msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+0+";"+0+";"+0;
+            sender.sendMessage(msg, cH.peers_listen, destID);
         }
     }
 
@@ -202,6 +210,12 @@ public class Mserver {
             info.add(key+"-"+totalLenght);
         }
         answer=info.toString();
+        return answer;
+    }
+
+    public String queryChunk(String fileName,int offset){
+        String answer=null;
+
         return answer;
     }
 }
