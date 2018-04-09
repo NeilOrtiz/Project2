@@ -97,13 +97,15 @@ public class Client {
 
     public void newMsgMserver(String msg) {
         String requestType,fileName,serverId,appendSize,datas;
-        int destID;
+        int destID,startOffset,endOffset;
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
         datas=msg.split(";")[3];
         serverId=msg.split(";")[4];
         destID=Integer.parseInt(serverId);
         appendSize=msg.split(";")[5];
+        //startOffset=Integer.parseInt(da);
+
 
         if (requestType.equals("AnswerAppend")) {
             System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
@@ -122,6 +124,8 @@ public class Client {
             }
         } else if (requestType.equals("AnswerRead")) {
             System.out.println("[INFO] Lectura: "+datas);
+            System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
+            msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+0;
             
         }
     }

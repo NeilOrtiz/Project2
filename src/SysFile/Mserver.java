@@ -62,7 +62,9 @@ public class Mserver {
                 msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+-1+";"+0+";"+0+";"+0;
 
             } else {
-                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+0+";"+0+";"+0;
+                int chunk=this.getChunk(fileName, offset);
+                serverId=this.findFserver(fileName, chunk);
+                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+serverId+";"+0+";"+0;
             }
 
 
@@ -227,19 +229,16 @@ public class Mserver {
     public String queryChunk(String fileName,int offset){
         String answer=null;
         int fileSize=-1;
-        int endOffset;
-        long chunkL;
-        double x;
-        int serverId;
+        int endOffset,chunk;
         ArrayList<String> info = new ArrayList<String>();
-        x=offset/BASE;
-        chunkL=(long) x;
-        int chunk=(int)chunkL;
+
+        chunk=this.getChunk(fileName, offset);
         int startOffset=offset-BASE*chunk;
+
         System.out.println("[queryChunk] startOffset: "+startOffset);
 
         fileSize=this.getFileSize(fileName);
-        serverId=this.findFserver(fileName, chunk);
+
         //System.out.println("[queryChunk] fileSize: "+fileSize);
 
         if (fileSize>=0) {
@@ -248,7 +247,7 @@ public class Mserver {
                 if (endOffset>BASE) {
                     //Partir busqueda en 2 chunks
                 } else {
-                    info.add(serverId+"-"+chunk+"-"+startOffset+"-"+endOffset);
+                    info.add(chunk+"-"+startOffset+"-"+endOffset);
                 }
             } else {
                 //[ERROR] offset bigger than file size
@@ -292,5 +291,15 @@ public class Mserver {
             } 
         }
         return fileSize;
+    }
+
+    public int getChunk(String fileName,int offset) {
+        int chunk=-1;
+        long chunkL;
+        double x;
+        x=offset/BASE;
+        chunkL=(long) x;
+        chunk=(int)chunkL;
+        return chunk;
     }
 }
