@@ -226,28 +226,21 @@ public class Mserver {
 
     public String queryChunk(String fileName,int offset){
         String answer=null;
-        String datas;
         int fileSize=-1;
         int endOffset;
         long chunkL;
         double x;
-        ArrayList<String> result = new ArrayList<String>();
+        int serverId;
         ArrayList<String> info = new ArrayList<String>();
         x=offset/BASE;
         chunkL=(long) x;
         int chunk=(int)chunkL;
         int startOffset=offset-BASE*chunk;
+        System.out.println("[queryChunk] startOffset: "+startOffset);
 
-        datas=this.query();
-        //System.out.println("[queryChunk] datas: "+datas);
-        result=this.procesDatas(datas);
-        for (String key:result){
-            if (fileName.equals(key.split("-")[0])) {
-                fileSize=Integer.parseInt(key.split("-")[1]);
-            } 
-        }
-
-        System.out.println("[queryChunk] fileSize: "+fileSize);
+        fileSize=this.getFileSize(fileName);
+        serverId=this.findFserver(fileName, chunk);
+        //System.out.println("[queryChunk] fileSize: "+fileSize);
 
         if (fileSize>=0) {
             if ((offset<=fileSize)) {
@@ -255,7 +248,7 @@ public class Mserver {
                 if (endOffset>BASE) {
                     //Partir busqueda en 2 chunks
                 } else {
-                    info.add(chunk+"-"+startOffset+"-"+endOffset);
+                    info.add(serverId+"-"+chunk+"-"+startOffset+"-"+endOffset);
                 }
             } else {
                 //[ERROR] offset bigger than file size
@@ -266,5 +259,38 @@ public class Mserver {
 
         answer=info.toString();   
         return answer;
+    }
+
+    public int findFserver (String fileName, int chunk) {
+        int serverId=-1;
+        ArrayList<String> dataFile= new ArrayList<String>();
+        int counter=0;
+        if (dad.metadata.containsKey(fileName)) {
+            dataFile=dad.metadata.get(fileName);
+            for (String dF:dataFile) {
+                if ((counter==chunk)&&(!dF.equals("null"))){
+                    serverId=Integer.parseInt(dF.split("-")[0]);
+                    System.out.println("[findFserver] serverId: "+serverId);
+                }
+                counter++;
+            }
+        }
+        return serverId;
+    }
+
+    public int getFileSize(String fileName){
+        int fileSize=-1;
+        String datas;
+        ArrayList<String> result = new ArrayList<String>();
+
+        datas=this.query();
+        result=this.procesDatas(datas);
+        for (String key:result){
+            if (fileName.equals(key.split("-")[0])) {
+                //System.out.println("[queryChunk] key: "+key);
+                fileSize=Integer.parseInt(key.split("-")[1]);
+            } 
+        }
+        return fileSize;
     }
 }
