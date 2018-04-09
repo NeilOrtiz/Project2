@@ -9,6 +9,8 @@ public class Mserver {
     private Parent dad;
     private CommunicationHandler cH;
     private Sender sender ;
+    public static final int BASE=8192;
+    public static final int LEN=20;
     
 
     public Mserver(Parent dad, CommunicationHandler cH){
@@ -55,7 +57,16 @@ public class Mserver {
             fileName=msg.split(";")[3];
             offset=Integer.parseInt(msg.split(";")[6]);
             info=this.queryChunk(fileName, offset);
-            msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+0+";"+0+";"+0;
+            
+            if (info.equals(null)) {
+                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+-1+";"+0+";"+0+";"+0;
+
+            } else {
+                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+0+";"+0+";"+0;
+            }
+
+
+            
             sender.sendMessage(msg, cH.peers_listen, destID);
         }
     }
@@ -215,7 +226,45 @@ public class Mserver {
 
     public String queryChunk(String fileName,int offset){
         String answer=null;
+        String datas;
+        int fileSize=-1;
+        int endOffset;
+        long chunkL;
+        double x;
+        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> info = new ArrayList<String>();
+        x=offset/BASE;
+        chunkL=(long) x;
+        int chunk=(int)chunkL;
+        int startOffset=offset-BASE*chunk;
 
+        datas=this.query();
+        //System.out.println("[queryChunk] datas: "+datas);
+        result=this.procesDatas(datas);
+        for (String key:result){
+            if (fileName.equals(key.split("-")[0])) {
+                fileSize=Integer.parseInt(key.split("-")[1]);
+            } 
+        }
+
+        System.out.println("[queryChunk] fileSize: "+fileSize);
+
+        if (fileSize>=0) {
+            if ((offset<=fileSize)) {
+                endOffset=startOffset+LEN;
+                if (endOffset>BASE) {
+                    //Partir busqueda en 2 chunks
+                } else {
+                    info.add(chunk+"-"+startOffset+"-"+endOffset);
+                }
+            } else {
+                //[ERROR] offset bigger than file size
+            }
+        } else {
+            //info=null;
+        }      
+
+        answer=info.toString();   
         return answer;
     }
 }

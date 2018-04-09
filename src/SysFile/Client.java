@@ -59,7 +59,7 @@ public class Client {
                     case 2:
                         System.out.println("Reading");
                         newFileName=console.readLine("Enter new File Name: ");
-                        offset=console.readLine("Enter append size: ");
+                        offset=console.readLine("Enter offset: ");
                         msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+newFileName+";"+0+";"+0+";"+offset;
                         sender.sendMessage(msg, cH.peers_listen, 10);
                         System.out.println();
@@ -120,6 +120,9 @@ public class Client {
             for (String key:result) {
                 System.out.println("        > "+key.split("-")[0]+": "+key.split("-")[1]+" bytes");
             }
+        } else if (requestType.equals("AnswerRead")) {
+            System.out.println("[INFO] Lectura: "+datas);
+            
         }
     }
 
