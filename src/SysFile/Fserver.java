@@ -98,7 +98,7 @@ public class Fserver {
                 try {
                     reading=this.readChunk(chunkName, startOffset, endOffset);
                     System.out.println("[newMsgClient] reading: "+reading);
-                    msg=dad.typeHost+";"+dad.myID+";"+"resultRead"+";"+fileName+";"+serverId+";"+0+";"+reading;
+                    msg=dad.typeHost+";"+dad.myID+";"+"resultRead"+";"+fileName+";"+serverId+";"+0+";"+reading+";"+datas;
                     sender.sendMessage(msg, cH.peers_listen, destID);
                 } catch (IOException ex) {
                     System.err.println(ex);

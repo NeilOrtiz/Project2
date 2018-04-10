@@ -251,6 +251,7 @@ public class Mserver {
                 }
             } else {
                 //[ERROR] offset bigger than file size
+                info.add("-1");
             }
         } else {
             //info=null;

@@ -116,7 +116,6 @@ public class Client {
             sender.sendMessage(msg, cH.peers_listen, destID);
         } else if (requestType.equals("AnswerLs")) {
 
-            //Mserver mserver=new Mserver(dad, cH);
             ArrayList<String> result = new ArrayList<String>();
             
             result=mserver.procesDatas(datas);
@@ -129,12 +128,23 @@ public class Client {
             System.out.println("[INFO] Lectura: "+offset);
             System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
             msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+offset;
-            sender.sendMessage(msg, cH.peers_listen, destID);
+            
+            if (destID==-1) {
+                System.err.println("[ERROR] File doesn't exist");
+            } else {
+                if (offset.equals("[-1]")) {
+                    System.err.println("[ERROR] Offset bigger than file size");
+                } else {
+                    sender.sendMessage(msg, cH.peers_listen, destID);
+                }
+            }
+
+            
         }
     }
 
     public void newMsgFserver(String msg) {
-        String requestType,fileName,appendSize,datas;
+        String requestType,fileName,appendSize,datas,request;
 
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
@@ -146,12 +156,31 @@ public class Client {
             System.out.println("[ERROR] "+appendSize+" bytes has NOT been append in "+fileName+".");
         } else if (requestType.equals("resultRead")) {
             datas=msg.split(";")[6];
+            request=msg.split(";")[7];
             ArrayList<String> result = new ArrayList<String>();
+            ArrayList<String> requestA= new ArrayList<String>();
             ArrayList<String> reading = new ArrayList<String>();
             result=mserver.procesDatas(datas);
+            requestA=mserver.procesDatas(request);
+            System.out.println("[newMsgFserver] result: "+result.toString());
+            //System.out.println("[newMsgFserver] msg: "+msg);
+            //System.out.println("[newMsgFserver] requestA: "+requestA);
+            this.printReading(result);
 
-        }
+        }  
+    }
 
-        
+    public void printReading(ArrayList<String> result){
+        int temp;
+            for (String x:result){
+                temp=Integer.parseInt(x);
+                if (temp>=33 && temp<=126) {
+                    System.out.print((char)temp);
+                } else {
+                    System.out.print("|");
+                }
+            }
+            System.out.print(" END");
+            System.out.println("");   
     }
 }
