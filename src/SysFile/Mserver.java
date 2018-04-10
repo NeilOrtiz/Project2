@@ -64,7 +64,7 @@ public class Mserver {
             } else {
                 int chunk=this.getChunk(fileName, offset);
                 serverId=this.findFserver(fileName, chunk);
-                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+info+";"+serverId+";"+0+";"+0;
+                msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+fileName+";"+serverId+";"+0+";"+info;
             }
 
 

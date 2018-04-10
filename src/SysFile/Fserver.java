@@ -58,8 +58,8 @@ public class Fserver {
     }
 
     public void newMsgClient (String msg) {
-        String requestType,fileName,appendSize,serverId,sourceId;
-        int appended_size,destID;
+        String requestType,fileName,appendSize,serverId,sourceId,datas,chunkName;
+        int appended_size,destID,chunk,startOffset,endOffset;
         sourceId=msg.split(";")[1];
         destID=Integer.parseInt(sourceId);
         requestType=msg.split(";")[2];
@@ -67,6 +67,7 @@ public class Fserver {
         appendSize=msg.split(";")[5];
         serverId=msg.split(";")[4];
         appended_size=Integer.parseInt(appendSize);
+        
 
         if (requestType.equals("append")){
             boolean success;
@@ -79,6 +80,33 @@ public class Fserver {
                 msg=dad.typeHost+";"+dad.myID+";"+"failedAppend"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             }
             sender.sendMessage(msg, cH.peers_listen, destID);
+        } else if (requestType.equals("read")) {
+            datas=msg.split(";")[6];
+            ArrayList<String> result = new ArrayList<String>();
+            ArrayList<String> reading = new ArrayList<String>();
+            Mserver mserver=new Mserver(dad, cH);
+            result=mserver.procesDatas(datas);
+            System.out.println("[newMsgClient] result: "+result);
+
+            for (String key:result) {
+                chunk=Integer.parseInt(key.split("-")[0]);
+                startOffset=Integer.parseInt(key.split("-")[1]);
+                endOffset=Integer.parseInt(key.split("-")[2]);
+                chunkName=fileName+"_data_"+chunk+".bin";
+                System.out.println("[newMsgClient] filename: "+fileName+"_data_"+chunk+".bin"+", OffsetStar: "+startOffset+", OffsetEnd: "+endOffset);
+
+                try {
+                    reading=this.readChunk(chunkName, startOffset, endOffset);
+                    System.out.println("[newMsgClient] reading: "+reading);
+                    msg=dad.typeHost+";"+dad.myID+";"+"resultRead"+";"+fileName+";"+serverId+";"+0+";"+reading;
+                    sender.sendMessage(msg, cH.peers_listen, destID);
+                } catch (IOException ex) {
+                    System.err.println(ex);
+                }
+
+                
+            }
+            
         }
         
     }

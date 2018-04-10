@@ -9,6 +9,7 @@ public class Client {
     private Parent dad;
     private Sender sender;
     private CommunicationHandler cH;
+    private Mserver mserver;
 
 
     public Client(Parent dad,CommunicationHandler cH){
@@ -16,6 +17,7 @@ public class Client {
         this.dad=dad;
         this.sender=new Sender();
         this.cH=cH;
+        this.mserver=new Mserver(dad, cH);
 
     }
 
@@ -96,14 +98,15 @@ public class Client {
     }
 
     public void newMsgMserver(String msg) {
-        String requestType,fileName,serverId,appendSize,datas;
-        int destID,startOffset,endOffset;
+        String requestType,fileName,serverId,appendSize,datas,offset;
+        int destID;
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
         datas=msg.split(";")[3];
         serverId=msg.split(";")[4];
         destID=Integer.parseInt(serverId);
         appendSize=msg.split(";")[5];
+        offset=msg.split(";")[6];
         //startOffset=Integer.parseInt(da);
 
 
@@ -113,7 +116,7 @@ public class Client {
             sender.sendMessage(msg, cH.peers_listen, destID);
         } else if (requestType.equals("AnswerLs")) {
 
-            Mserver mserver=new Mserver(dad, cH);
+            //Mserver mserver=new Mserver(dad, cH);
             ArrayList<String> result = new ArrayList<String>();
             
             result=mserver.procesDatas(datas);
@@ -123,15 +126,15 @@ public class Client {
                 System.out.println("        > "+key.split("-")[0]+": "+key.split("-")[1]+" bytes");
             }
         } else if (requestType.equals("AnswerRead")) {
-            System.out.println("[INFO] Lectura: "+datas);
+            System.out.println("[INFO] Lectura: "+offset);
             System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
-            msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+0;
-            
+            msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+offset;
+            sender.sendMessage(msg, cH.peers_listen, destID);
         }
     }
 
     public void newMsgFserver(String msg) {
-        String requestType,fileName,appendSize;
+        String requestType,fileName,appendSize,datas;
 
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
@@ -141,6 +144,12 @@ public class Client {
             System.out.println("[NOTI] "+appendSize+" bytes has been append in "+fileName+".");
         } else if (requestType.equals("failedAppend")) {
             System.out.println("[ERROR] "+appendSize+" bytes has NOT been append in "+fileName+".");
+        } else if (requestType.equals("resultRead")) {
+            datas=msg.split(";")[6];
+            ArrayList<String> result = new ArrayList<String>();
+            ArrayList<String> reading = new ArrayList<String>();
+            result=mserver.procesDatas(datas);
+
         }
 
         

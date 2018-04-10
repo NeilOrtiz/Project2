@@ -256,7 +256,7 @@ public class Chunk {
 		ArrayList<String> readArray = new ArrayList<String>();
 		String sourceFileName;
 
-		sourceFileName=pathFile+"\\"+fileName;
+		sourceFileName=pathFile+"//"+fileName;
 
 		File file=null;
 		FileInputStream fileStream=new FileInputStream(file=new File(sourceFileName));
