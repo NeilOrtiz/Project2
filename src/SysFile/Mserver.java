@@ -248,7 +248,7 @@ public class Mserver {
 
         //System.out.println("[queryChunk] fileSize: "+fileSize);
 
-        if (fileSize>=0) {
+        if (fileSize>0) {
             if ((offset<=fileSize)) {
 
                 if (yy<LEN) {
@@ -281,7 +281,7 @@ public class Mserver {
                 info.add("-1");
             }
         } else {
-            //info=null;
+            info.add("-2");
         }      
 
         answer=info.toString();   

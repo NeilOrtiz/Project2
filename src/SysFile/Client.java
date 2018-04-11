@@ -134,6 +134,8 @@ public class Client {
             } else {
                 if (offset.equals("[-1]")) {
                     System.err.println("[ERROR] Offset bigger than file size");
+                } else if (offset.equals("[-2]")) {
+                    System.err.println("[ERROR] Empty file");
                 } else {
                     sender.sendMessage(msg, cH.peers_listen, destID);
                 }
