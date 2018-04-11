@@ -126,7 +126,7 @@ public class Client {
             }
         } else if (requestType.equals("AnswerRead")) {
             System.out.println("[INFO] Lectura: "+offset);
-            System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
+            //System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
             msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+offset;
             
             if (destID==-1) {

@@ -57,6 +57,7 @@ public class Mserver {
             fileName=msg.split(";")[3];
             offset=Integer.parseInt(msg.split(";")[6]);
             info=this.queryChunk(fileName, offset);
+            System.out.println("[newMsgClient] info: "+info);
             
             if (info.equals(null)) {
                 msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+-1+";"+0+";"+0+";"+0;
@@ -239,39 +240,49 @@ public class Mserver {
 
         int yy=largestB-startOffset;
 
+        
+
+        System.out.println("[queryChunk] startOffset: "+startOffset);
+
         fileSize=this.getFileSize(fileName);
 
-        if (yy<LEN) {
-            System.out.println("[queryChunk] NEXT chunk. yy: "+yy);
-            
-        } else { 
-            System.out.println("[queryChunk] CURRENT chunk. yy: "+yy);
-            System.out.println("[queryChunk] startOffset: "+startOffset);
+        //System.out.println("[queryChunk] fileSize: "+fileSize);
 
-            
+        if (fileSize>=0) {
+            if ((offset<=fileSize)) {
 
-            //System.out.println("[queryChunk] fileSize: "+fileSize);
+                if (yy<LEN) {
+                    System.out.println("[queryChunk] NEXT chunk. yy: "+yy);
+                    int endOffset1,endOffset2,startOffset1,startOffset2;
+                    startOffset1=startOffset;
+                    endOffset1=startOffset+yy;
+                    startOffset2=0;
+                    endOffset2=LEN-yy-1;
+                    // System.out.println("[queryChunk] startOffset1: "+startOffset1);
+                    // System.out.println("[queryChunk] startOffset2: "+startOffset2);
+                    // System.out.println("[queryChunk] endOffset1: "+endOffset1);
+                    // System.out.println("[queryChunk] endOffset2: "+endOffset2);
+                    info.add(chunk+"-"+startOffset1+"-"+endOffset1);
+                    info.add((chunk+1)+"-"+startOffset2+"-"+endOffset2);
 
-            if (fileSize>=0) {
-                if ((offset<=fileSize)) {
-                    endOffset=startOffset+LEN;
-                    if (endOffset>BASE) {
-                        //Partir busqueda en 2 chunks
-                    } else {
-                        info.add(chunk+"-"+startOffset+"-"+endOffset);
-                    }
                 } else {
-                    //[ERROR] offset bigger than file size
-                    info.add("-1");
+                    
+                    System.out.println("[queryChunk] CURRENT chunk. yy: "+yy);
+                    endOffset=startOffset+LEN-1;
+                    info.add(chunk+"-"+startOffset+"-"+endOffset);
+                    // if (endOffset>BASE) {
+                    //     //Partir busqueda en 2 chunks
+                    // } else {
+                    //     info.add(chunk+"-"+startOffset+"-"+endOffset);
+                    // }
                 }
             } else {
-                //info=null;
+                //[ERROR] offset bigger than file size
+                info.add("-1");
             }
-        }
-
-
-
-              
+        } else {
+            //info=null;
+        }      
 
         answer=info.toString();   
         return answer;

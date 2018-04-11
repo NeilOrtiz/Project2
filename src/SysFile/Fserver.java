@@ -93,19 +93,19 @@ public class Fserver {
                 startOffset=Integer.parseInt(key.split("-")[1]);
                 endOffset=Integer.parseInt(key.split("-")[2]);
                 chunkName=fileName+"_data_"+chunk+".bin";
+                System.out.println("[newMsgClient] chunkName: "+chunkName);
                 System.out.println("[newMsgClient] filename: "+fileName+"_data_"+chunk+".bin"+", OffsetStar: "+startOffset+", OffsetEnd: "+endOffset);
 
                 try {
-                    reading=this.readChunk(chunkName, startOffset, endOffset);
+                    reading.add(this.readChunk(chunkName, startOffset, endOffset).toString());
                     System.out.println("[newMsgClient] reading: "+reading);
-                    msg=dad.typeHost+";"+dad.myID+";"+"resultRead"+";"+fileName+";"+serverId+";"+0+";"+reading+";"+datas;
-                    sender.sendMessage(msg, cH.peers_listen, destID);
+                    
                 } catch (IOException ex) {
                     System.err.println(ex);
                 }
-
-                
             }
+            msg=dad.typeHost+";"+dad.myID+";"+"resultRead"+";"+fileName+";"+serverId+";"+0+";"+reading+";"+datas;
+            sender.sendMessage(msg, cH.peers_listen, destID);
             
         }
         
