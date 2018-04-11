@@ -23,77 +23,171 @@ public class Client {
 
     public void execute() {
 
-        Scanner choice = new Scanner(System.in);
+        //Scanner choice = new Scanner(System.in);
         Console console = System.console();
-        String newFileName,appendSize,offset; 
-            int choiceEntry=-1;
+        String newFileName,appendSize,offset,arg,request,fileName; 
+        int choiceEntry=-1;
+        boolean exit=false;
 
-            while (choiceEntry!=4) {
+        while(!exit) {
+            System.out.println("");
+            arg=console.readLine("[Project2]>> ");
+            request=arg.split(" ")[0];
+            if (request.equals("exit")){
+                exit=true;
 
-                while (choiceEntry<1 || choiceEntry >5) {
+            } else if (request.equals("ls")) {
+                System.out.println("Gathering information...");
+                msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
+                sender.sendMessage(msg, cH.peers_listen, 10);
+                
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex) {
+                    System.out.println(ex.getStackTrace());
+                }
 
-                    System.out.println("Enter one of the following commands:");
-                    System.out.println("1 - Create");
-                    System.out.println("2 - Read");
-                    System.out.println("3 - Append");
-                    System.out.println("4 - Exit");
-                    System.out.println("5 - Query");
-                    System.out.println();
-                    if (choice.hasNextInt()) {
+            } else if (request.equals("create")) {
+                System.out.println("Creating...");
 
-                        choiceEntry=choice.nextInt();
-                        if (choiceEntry<1 || choiceEntry >5) {
-                            System.out.println("Invalidad input");
+                try {
+                    newFileName=request=arg.split(" ")[1];
+                    msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
+                    sender.sendMessage(msg, cH.peers_listen, 10);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    System.err.println("Usage: create <fileName>");
+                }
+            } else if (request.equals("append")) {
+                
+                try {
+                    fileName=arg.split(" ")[1];
+                    try {
+                        appendSize=arg.split(" ")[2];
+                        Integer.parseInt(appendSize);
+                        msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+0+";"+appendSize+";"+0;
+                        sender.sendMessage(msg, cH.peers_listen, 10);
+                        System.out.println("Appending...");
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            System.out.println(ex.getStackTrace());
                         }
-                        
+                    } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
+                        System.err.println("Usage: append <fileName> <appendSize>");
                     }
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    System.err.println("Usage: append <fileName> <appendSize>");
+                } 
+
+            } else if (request.equals("read")) {
+                try {
+                    
+                    fileName=arg.split(" ")[1];
+
+                    try {
+                        offset=arg.split(" ")[2];
+                        Integer.parseInt(offset);
+                        msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+0+";"+0+";"+offset;
+                        sender.sendMessage(msg, cH.peers_listen, 10);
+                        System.out.println("Reading...");
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            System.out.println(ex.getStackTrace());
+                        }
+    
+                    } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
+                        System.err.println("Usage: read <fileName> <offset>");
+                    }
+
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    System.err.println("Usage: read <fileName> <offset>");
                 }
 
-                switch (choiceEntry) {
-                    case 1:
-                        System.out.println("Creating");
-                        System.out.println();
-                        newFileName=console.readLine("Enter new File Name: ");
-                        msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
-                        sender.sendMessage(msg, cH.peers_listen, 10);
-                        break;
+                
+                
+                
 
-                    case 2:
-                        System.out.println("Reading");
-                        newFileName=console.readLine("Enter new File Name: ");
-                        offset=console.readLine("Enter offset: ");
-                        msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+newFileName+";"+0+";"+0+";"+offset;
-                        sender.sendMessage(msg, cH.peers_listen, 10);
-                        System.out.println();
-                        break;
-
-                    case 3:
-                        System.out.println("Appending");
-                        System.out.println();
-                        newFileName=console.readLine("Enter new File Name: ");
-                        appendSize=console.readLine("Enter append size: ");
-                        msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+newFileName+";"+0+";"+appendSize+";"+0;
-                        sender.sendMessage(msg, cH.peers_listen, 10);
-                        break;
-
-                    case 4:
-                        System.out.println("Saliendo");
-                        choice.close();
-                        System.exit(1);
-                        break;
-                    
-                    case 5:
-                        System.out.println("Gathering information...");
-                        msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
-                        sender.sendMessage(msg, cH.peers_listen, 10);
-                        break;
-                    
-                    default:
-                        break;
-                }
-                choiceEntry=-1;
+            } else {
+                System.err.println("Usage: <ls|create|append|read|exit> <fileName> <appendSize|offset>");
             }
-            choice.close();
+        }
+        System.out.println("He salido");
+        System.exit(1);
+
+        
+
+
+
+            // while (choiceEntry!=4) {
+
+            //     while (choiceEntry<1 || choiceEntry >5) {
+
+            //         System.out.println("Enter one of the following commands:");
+            //         System.out.println("1 - Create");
+            //         System.out.println("2 - Read");
+            //         System.out.println("3 - Append");
+            //         System.out.println("4 - Exit");
+            //         System.out.println("5 - Query");
+            //         System.out.println();
+            //         if (choice.hasNextInt()) {
+
+            //             choiceEntry=choice.nextInt();
+            //             if (choiceEntry<1 || choiceEntry >5) {
+            //                 System.out.println("Invalidad input");
+            //             }
+                        
+            //         }
+            //     }
+
+            //     switch (choiceEntry) {
+            //         case 1:
+            //             System.out.println("Creating");
+            //             System.out.println();
+            //             newFileName=console.readLine("Enter new File Name: ");
+            //             System.out.println("[execute] newFileName: "+newFileName);
+            //             System.out.println("[execute] casa: "+newFileName.split(" ")[1]);
+            //             System.out.println("[execute] Apparece?: "+newFileName.split(" ")[2]);
+            //             msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
+            //             sender.sendMessage(msg, cH.peers_listen, 10);
+            //             break;
+
+            //         case 2:
+            //             System.out.println("Reading");
+            //             newFileName=console.readLine("Enter new File Name: ");
+            //             offset=console.readLine("Enter offset: ");
+            //             msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+newFileName+";"+0+";"+0+";"+offset;
+            //             sender.sendMessage(msg, cH.peers_listen, 10);
+            //             System.out.println();
+            //             break;
+
+            //         case 3:
+            //             System.out.println("Appending");
+            //             System.out.println();
+            //             newFileName=console.readLine("Enter new File Name: ");
+            //             appendSize=console.readLine("Enter append size: ");
+            //             msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+newFileName+";"+0+";"+appendSize+";"+0;
+            //             sender.sendMessage(msg, cH.peers_listen, 10);
+            //             break;
+
+            //         case 4:
+            //             System.out.println("Saliendo");
+            //             choice.close();
+            //             System.exit(1);
+            //             break;
+                    
+            //         case 5:
+            //             System.out.println("Gathering information...");
+            //             msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
+            //             sender.sendMessage(msg, cH.peers_listen, 10);
+            //             break;
+                    
+            //         default:
+            //             break;
+            //     }
+            //     choiceEntry=-1;
+            // }
+            //choice.close();
 
     }
 
@@ -111,7 +205,7 @@ public class Client {
 
 
         if (requestType.equals("AnswerAppend")) {
-            System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
+            System.out.println("[INFO] File: "+fileName+" last chunk is located in F-server "+serverId);
             msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+serverId+";"+appendSize+";"+0;
             sender.sendMessage(msg, cH.peers_listen, destID);
         } else if (requestType.equals("AnswerLs")) {
