@@ -27,6 +27,15 @@ public class Client {
         String newFileName,appendSize,offset,arg,request,fileName; 
         boolean exit=false;
 
+        System.out.println("");
+        System.out.println("*******************************************************");
+        System.out.println("                CS6378: PROJECT II");
+        System.out.println("* File  Creation:    >> create <fileName>");
+        System.out.println("* Append File   :    >> append <fileName> <appendSize>");
+        System.out.println("* Read File     :    >> read <fileName> <offset>");
+        System.out.println("* File list     :    >> ls");
+        System.out.println("* Exit          :    >> exit");
+
         while(!exit) {
             System.out.println("");
             arg=console.readLine("[Project2]>> ");
@@ -46,12 +55,13 @@ public class Client {
                     }
 
                 } else if (request.equals("create")) {
-                    System.out.println("Creating...");
+                    
 
                     try {
                         newFileName=request=arg.split(" ")[1];
                         msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
                         sender.sendMessage(msg, cH.peers_listen, 10);
+                        System.out.println("File "+newFileName+" created");
                     } catch (ArrayIndexOutOfBoundsException ex) {
                         System.err.println("Usage: create <fileName>");
                     }
@@ -120,9 +130,7 @@ public class Client {
                     exit=true;
                 }
             }
-            
         }
-        System.out.println("He salido");
         System.exit(1);
     }
 
@@ -182,7 +190,7 @@ public class Client {
         appendSize=msg.split(";")[5];
 
         if (requestType.equals("successAppend")) {
-            System.out.println("[NOTI] "+appendSize+" bytes has been append in "+fileName+".");
+            System.out.println("[INFO] "+appendSize+" bytes has been append in "+fileName+".");
         } else if (requestType.equals("failedAppend")) {
             System.out.println("[ERROR] "+appendSize+" bytes has NOT been append in "+fileName+".");
         } else if (requestType.equals("resultRead")) {

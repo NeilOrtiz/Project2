@@ -171,9 +171,6 @@ public class Chunk {
 			long S=f.length();
 			int tempo=(int) S;
 			int diference=MAX_LENGTH-tempo;
-			System.out.println("[append] tempo: "+tempo);
-			System.out.println("[append] diference: "+diference);
-			System.out.println("[append] appended_size: "+appended_size);
 
 			if ( (diference > 0) && (diference < appended_size)  ) {
 				//Refill last chunk with null
@@ -277,12 +274,6 @@ public class Chunk {
 			}
 			counter++;
 		}
-		//System.out.println("");
-		//System.out.println("readArray: "+readArray);
-		//System.out.println("---------------");
-		// for (String k:readArray) {
-		// 	System.out.println((char)Integer.parseInt(k));
-		// }
 		fileStream.close();
 
 		return readArray;

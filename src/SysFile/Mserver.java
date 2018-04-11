@@ -81,7 +81,8 @@ public class Mserver {
         String requestType;
         requestType=msg.split(";")[2];
 
-        System.out.println("[INFO] Heartbeat received from F-server "+msg.split(";")[1]);
+        System.out.println("[INFO] Heartbeat received from F-server "+msg.split(";")[1]+", datas: "+msg.split(";")[3]);
+        System.out.println("");
         if (requestType.equals("hb")) {
             this.update(msg);
         }

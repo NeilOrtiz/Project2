@@ -32,6 +32,8 @@ public class HeartBeat extends Thread {
             
             msg=this.generateMsg(this.folder);
             sender.sendMessage(msg, cH.peers_listen,10);
+            System.out.println("[INFO] Sending heartbeat datas: "+msg.split(";")[3]);
+            System.out.println("");
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException ex) {

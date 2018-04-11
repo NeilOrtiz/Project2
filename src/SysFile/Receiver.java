@@ -72,8 +72,6 @@ public class Receiver extends Thread {
                     System.out.println(ex.getMessage());
                     System.exit(1);
                 }
-                
-
             } else {
 
                 try {
@@ -84,21 +82,8 @@ public class Receiver extends Thread {
                     System.out.println(ex.getMessage());
                     System.exit(1);
                 }
-
             }
-
-            
-
-
-
-
         }
-
-        long threadId =Thread.currentThread().getId();
-        //System.out.println("Thread # "+threadId+" from F-server id "+idGuest+" has finished");
-
-        
-
     }
 
 }
