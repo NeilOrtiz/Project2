@@ -29,8 +29,7 @@ public class HeartBeat extends Thread {
         String msg;
 
         while (dad.listening) {
-
-            // do something
+            
             msg=this.generateMsg(this.folder);
             sender.sendMessage(msg, cH.peers_listen,10);
             try {

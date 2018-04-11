@@ -61,15 +61,20 @@ public class Client {
                         fileName=arg.split(" ")[1];
                         try {
                             appendSize=arg.split(" ")[2];
-                            Integer.parseInt(appendSize);
-                            msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+0+";"+appendSize+";"+0;
-                            sender.sendMessage(msg, cH.peers_listen, 10);
-                            System.out.println("Appending...");
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                System.out.println(ex.getStackTrace());
+                            int maxAppend=Integer.parseInt(appendSize);
+                            if (maxAppend<=2048) {
+                                msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+0+";"+appendSize+";"+0;
+                                sender.sendMessage(msg, cH.peers_listen, 10);
+                                System.out.println("Appending...");
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException ex) {
+                                    System.out.println(ex.getStackTrace());
+                                }
+                            } else {
+                                System.err.println("[ERROR] Max amount of data that can be appended is 2048 bytes");
                             }
+                            
                         } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
                             System.err.println("Usage: append <fileName> <appendSize>");
                         }

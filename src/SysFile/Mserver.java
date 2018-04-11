@@ -28,6 +28,7 @@ public class Mserver {
         String requestType,fileName,appendSize;
         int serverId,destID,offset;
 
+        System.out.println("[INFO] New request "+msg.split(";")[2]+", from Client ID "+msg.split(";")[1]);
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
 
@@ -58,7 +59,7 @@ public class Mserver {
             fileName=msg.split(";")[3];
             offset=Integer.parseInt(msg.split(";")[6]);
             info=this.queryChunk(fileName, offset);
-            System.out.println("[newMsgClient] info: "+info);
+            //System.out.println("[newMsgClient] info: "+info);
             
             if (info.equals(null)) {
                 msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+-1+";"+0+";"+0+";"+0;
@@ -66,6 +67,7 @@ public class Mserver {
             } else {
                 int chunk=this.getChunk(fileName, offset);
                 serverId=this.findFserver(fileName, chunk);
+                System.out.println("[INFO] F-server that contains chunk: "+serverId);
                 msg=dad.typeHost+";"+dad.myID+";"+"AnswerRead"+";"+fileName+";"+serverId+";"+0+";"+info;
             }
 
@@ -79,6 +81,7 @@ public class Mserver {
         String requestType;
         requestType=msg.split(";")[2];
 
+        System.out.println("[INFO] Heartbeat received from F-server "+msg.split(";")[1]);
         if (requestType.equals("hb")) {
             this.update(msg);
         }
@@ -243,7 +246,7 @@ public class Mserver {
 
         
 
-        System.out.println("[queryChunk] startOffset: "+startOffset);
+        //System.out.println("[queryChunk] startOffset: "+startOffset);
 
         fileSize=this.getFileSize(fileName);
 
@@ -253,7 +256,7 @@ public class Mserver {
             if ((offset<=fileSize)) {
 
                 if (yy<LEN) {
-                    System.out.println("[queryChunk] NEXT chunk. yy: "+yy);
+                    //System.out.println("[queryChunk] NEXT chunk. yy: "+yy);
                     int endOffset1,endOffset2,startOffset1,startOffset2;
                     startOffset1=startOffset;
                     endOffset1=startOffset+yy;
@@ -268,7 +271,7 @@ public class Mserver {
 
                 } else {
                     
-                    System.out.println("[queryChunk] CURRENT chunk. yy: "+yy);
+                    //System.out.println("[queryChunk] CURRENT chunk. yy: "+yy);
                     endOffset=startOffset+LEN-1;
                     info.add(chunk+"-"+startOffset+"-"+endOffset);
                     // if (endOffset>BASE) {
@@ -298,7 +301,7 @@ public class Mserver {
             for (String dF:dataFile) {
                 if ((counter==chunk)&&(!dF.equals("null"))){
                     serverId=Integer.parseInt(dF.split("-")[0]);
-                    System.out.println("[findFserver] serverId: "+serverId);
+                    //System.out.println("[INFO] serverId: "+serverId);
                 }
                 counter++;
             }
