@@ -2,7 +2,6 @@ package SysFile;
 
 import java.io.Console;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Client {
     private String msg;
@@ -23,172 +22,103 @@ public class Client {
 
     public void execute() {
 
-        //Scanner choice = new Scanner(System.in);
+        dad.availability=true;
         Console console = System.console();
         String newFileName,appendSize,offset,arg,request,fileName; 
-        int choiceEntry=-1;
         boolean exit=false;
 
         while(!exit) {
             System.out.println("");
             arg=console.readLine("[Project2]>> ");
             request=arg.split(" ")[0];
-            if (request.equals("exit")){
-                exit=true;
-
-            } else if (request.equals("ls")) {
-                System.out.println("Gathering information...");
-                msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
-                sender.sendMessage(msg, cH.peers_listen, 10);
-                
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                    System.out.println(ex.getStackTrace());
-                }
-
-            } else if (request.equals("create")) {
-                System.out.println("Creating...");
-
-                try {
-                    newFileName=request=arg.split(" ")[1];
-                    msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
+            if (dad.availability) {
+                if (request.equals("exit")){
+                    exit=true;
+                } else if (request.equals("ls")) {
+                    System.out.println("Gathering information...");
+                    msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
                     sender.sendMessage(msg, cH.peers_listen, 10);
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    System.err.println("Usage: create <fileName>");
-                }
-            } else if (request.equals("append")) {
-                
-                try {
-                    fileName=arg.split(" ")[1];
-                    try {
-                        appendSize=arg.split(" ")[2];
-                        Integer.parseInt(appendSize);
-                        msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+0+";"+appendSize+";"+0;
-                        sender.sendMessage(msg, cH.peers_listen, 10);
-                        System.out.println("Appending...");
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                            System.out.println(ex.getStackTrace());
-                        }
-                    } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
-                        System.err.println("Usage: append <fileName> <appendSize>");
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    System.err.println("Usage: append <fileName> <appendSize>");
-                } 
-
-            } else if (request.equals("read")) {
-                try {
                     
-                    fileName=arg.split(" ")[1];
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        System.out.println(ex.getStackTrace());
+                    }
+
+                } else if (request.equals("create")) {
+                    System.out.println("Creating...");
 
                     try {
-                        offset=arg.split(" ")[2];
-                        Integer.parseInt(offset);
-                        msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+0+";"+0+";"+offset;
+                        newFileName=request=arg.split(" ")[1];
+                        msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
                         sender.sendMessage(msg, cH.peers_listen, 10);
-                        System.out.println("Reading...");
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+                        System.err.println("Usage: create <fileName>");
+                    }
+                } else if (request.equals("append")) {
+                    
+                    try {
+                        fileName=arg.split(" ")[1];
                         try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                            System.out.println(ex.getStackTrace());
+                            appendSize=arg.split(" ")[2];
+                            Integer.parseInt(appendSize);
+                            msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+fileName+";"+0+";"+appendSize+";"+0;
+                            sender.sendMessage(msg, cH.peers_listen, 10);
+                            System.out.println("Appending...");
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException ex) {
+                                System.out.println(ex.getStackTrace());
+                            }
+                        } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
+                            System.err.println("Usage: append <fileName> <appendSize>");
                         }
-    
-                    } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+                        System.err.println("Usage: append <fileName> <appendSize>");
+                    } 
+
+                } else if (request.equals("read")) {
+                    try {
+                        
+                        fileName=arg.split(" ")[1];
+
+                        try {
+                            offset=arg.split(" ")[2];
+                            Integer.parseInt(offset);
+                            msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+0+";"+0+";"+offset;
+                            sender.sendMessage(msg, cH.peers_listen, 10);
+                            //System.out.println("Reading...");
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException ex) {
+                                System.out.println(ex.getStackTrace());
+                            }
+        
+                        } catch (ArrayIndexOutOfBoundsException|NumberFormatException ex) {
+                            System.err.println("Usage: read <fileName> <offset>");
+                        }
+
+                    } catch (ArrayIndexOutOfBoundsException ex) {
                         System.err.println("Usage: read <fileName> <offset>");
                     }
 
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    System.err.println("Usage: read <fileName> <offset>");
+                    
+                    
+                    
+
+                } else {
+                    System.err.println("Usage: <ls|create|append|read|exit> <fileName> <appendSize|offset>");
                 }
-
-                
-                
-                
-
             } else {
-                System.err.println("Usage: <ls|create|append|read|exit> <fileName> <appendSize|offset>");
+                System.err.println("System not available");
+                if (request.equals("exit")){
+                    exit=true;
+                }
             }
+            
         }
         System.out.println("He salido");
         System.exit(1);
-
-        
-
-
-
-            // while (choiceEntry!=4) {
-
-            //     while (choiceEntry<1 || choiceEntry >5) {
-
-            //         System.out.println("Enter one of the following commands:");
-            //         System.out.println("1 - Create");
-            //         System.out.println("2 - Read");
-            //         System.out.println("3 - Append");
-            //         System.out.println("4 - Exit");
-            //         System.out.println("5 - Query");
-            //         System.out.println();
-            //         if (choice.hasNextInt()) {
-
-            //             choiceEntry=choice.nextInt();
-            //             if (choiceEntry<1 || choiceEntry >5) {
-            //                 System.out.println("Invalidad input");
-            //             }
-                        
-            //         }
-            //     }
-
-            //     switch (choiceEntry) {
-            //         case 1:
-            //             System.out.println("Creating");
-            //             System.out.println();
-            //             newFileName=console.readLine("Enter new File Name: ");
-            //             System.out.println("[execute] newFileName: "+newFileName);
-            //             System.out.println("[execute] casa: "+newFileName.split(" ")[1]);
-            //             System.out.println("[execute] Apparece?: "+newFileName.split(" ")[2]);
-            //             msg=dad.typeHost+";"+dad.myID+";"+"creation"+";"+newFileName;
-            //             sender.sendMessage(msg, cH.peers_listen, 10);
-            //             break;
-
-            //         case 2:
-            //             System.out.println("Reading");
-            //             newFileName=console.readLine("Enter new File Name: ");
-            //             offset=console.readLine("Enter offset: ");
-            //             msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+newFileName+";"+0+";"+0+";"+offset;
-            //             sender.sendMessage(msg, cH.peers_listen, 10);
-            //             System.out.println();
-            //             break;
-
-            //         case 3:
-            //             System.out.println("Appending");
-            //             System.out.println();
-            //             newFileName=console.readLine("Enter new File Name: ");
-            //             appendSize=console.readLine("Enter append size: ");
-            //             msg=dad.typeHost+";"+dad.myID+";"+"append"+";"+newFileName+";"+0+";"+appendSize+";"+0;
-            //             sender.sendMessage(msg, cH.peers_listen, 10);
-            //             break;
-
-            //         case 4:
-            //             System.out.println("Saliendo");
-            //             choice.close();
-            //             System.exit(1);
-            //             break;
-                    
-            //         case 5:
-            //             System.out.println("Gathering information...");
-            //             msg=dad.typeHost+";"+dad.myID+";"+"ls"+";"+0+";"+0+";"+0+";"+0;
-            //             sender.sendMessage(msg, cH.peers_listen, 10);
-            //             break;
-                    
-            //         default:
-            //             break;
-            //     }
-            //     choiceEntry=-1;
-            // }
-            //choice.close();
-
     }
 
     public void newMsgMserver(String msg) {
@@ -219,7 +149,7 @@ public class Client {
                 System.out.println("        > "+key.split("-")[0]+": "+key.split("-")[1]+" bytes");
             }
         } else if (requestType.equals("AnswerRead")) {
-            System.out.println("[INFO] Lectura: "+offset);
+            //System.out.println("[INFO] Lectura: "+offset);
             //System.out.println("[INFO] File: "+fileName+" is located in F-server "+serverId);
             msg=dad.typeHost+";"+dad.myID+";"+"read"+";"+fileName+";"+serverId+";"+0+";"+offset;
             
@@ -240,7 +170,7 @@ public class Client {
     }
 
     public void newMsgFserver(String msg) {
-        String requestType,fileName,appendSize,datas,request;
+        String requestType,fileName,appendSize,datas;
 
         requestType=msg.split(";")[2];
         fileName=msg.split(";")[3];
@@ -252,13 +182,13 @@ public class Client {
             System.out.println("[ERROR] "+appendSize+" bytes has NOT been append in "+fileName+".");
         } else if (requestType.equals("resultRead")) {
             datas=msg.split(";")[6];
-            request=msg.split(";")[7];
+            //request=msg.split(";")[7];
             ArrayList<String> result = new ArrayList<String>();
-            ArrayList<String> requestA= new ArrayList<String>();
-            ArrayList<String> reading = new ArrayList<String>();
+            //ArrayList<String> requestA= new ArrayList<String>();
+            //ArrayList<String> reading = new ArrayList<String>();
             result=mserver.procesDatas(datas);
-            requestA=mserver.procesDatas(request);
-            System.out.println("[newMsgFserver] result: "+result.toString());
+            //requestA=mserver.procesDatas(request);
+            //System.out.println("[newMsgFserver] result: "+result.toString());
             //System.out.println("[newMsgFserver] msg: "+msg);
             //System.out.println("[newMsgFserver] requestA: "+requestA);
             this.printReading(result);
@@ -268,6 +198,7 @@ public class Client {
 
     public void printReading(ArrayList<String> result){
         int temp;
+        System.out.print("Reading: ");
             for (String x:result){
                 temp=Integer.parseInt(x);
                 if (temp>=33 && temp<=126) {

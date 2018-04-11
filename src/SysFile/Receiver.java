@@ -35,13 +35,27 @@ public class Receiver extends Thread {
                         counter=0;
                     } else {
                         counter++;
+                        if (dad.typeHost.equals("c")) {
+                            //System.err.println("System not available. F-server "+idGuest+" down");
+                            dad.availability=false;
+                        } 
                         if (counter%4==0) {
-                            System.out.println("Connection lost with F-server "+idGuest);
+                            if (dad.typeHost.equals("M")) {
+                                System.err.println("Connection lost with F-server "+idGuest);
+                                dad.availability=false;
+                            } 
+                            
                             cH.peers_listen.remove(idGuest); // remove socket id from hashtable
                             cH.sockets_ht.remove(idGuest);// remove socket id from hashtable
                             readSocket.close();
                             cH.reconnection(); // wait a new connection request
-                            System.out.println("Connection restored with F-server "+idGuest);
+                            if (dad.typeHost.equals("M")){
+                                System.err.println("Connection restored with F-server "+idGuest);
+                            } else {
+                                System.err.println("System available");
+                                dad.availability=true;
+                            }
+                            
                             break; // finish thread
                             
                         } else {
@@ -81,7 +95,7 @@ public class Receiver extends Thread {
         }
 
         long threadId =Thread.currentThread().getId();
-        System.out.println("Thread # "+threadId+" from F-server id "+idGuest+" has finished");
+        //System.out.println("Thread # "+threadId+" from F-server id "+idGuest+" has finished");
 
         
 

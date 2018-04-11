@@ -14,6 +14,7 @@ public class Parent {
     public File folder;
     public Hashtable<String,ArrayList<String>> metadata;
     public  Lock mutex1;
+    public boolean availability;
 
     public Parent(int myID,String typeHost) {
         this.myID=myID;
@@ -22,6 +23,7 @@ public class Parent {
         this.folder=null;
         this.metadata=new Hashtable<String,ArrayList<String>>();
         this.mutex1=new ReentrantLock(true);
+        this.availability=false;
     }
 
     public static void main (String[] args) {
@@ -45,7 +47,7 @@ public class Parent {
             if (success==true) {
                 System.out.println("M-server Online");
             }
-
+            
             mserver.execute();
 
         } else if (args[1].equals("s")) {
@@ -72,11 +74,6 @@ public class Parent {
             }
 
             client.execute();
-
-
-            
-
-            
 
         } else {
 

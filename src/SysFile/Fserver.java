@@ -22,6 +22,7 @@ public class Fserver {
 
     public void execute(){
         //HearBeat
+        dad.availability=true;
         HeartBeat heart = new HeartBeat(dad,cH,dad.folder);
         heart.start();
     }

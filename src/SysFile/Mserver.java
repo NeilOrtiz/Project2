@@ -21,6 +21,7 @@ public class Mserver {
 
     public void execute(){
         System.out.println("This is the M-server");
+        dad.availability=true;
     }
 
     public void newMsgClient(String msg){
