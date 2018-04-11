@@ -171,6 +171,9 @@ public class Chunk {
 			long S=f.length();
 			int tempo=(int) S;
 			int diference=MAX_LENGTH-tempo;
+			System.out.println("[append] tempo: "+tempo);
+			System.out.println("[append] diference: "+diference);
+			System.out.println("[append] appended_size: "+appended_size);
 
 			if ( (diference > 0) && (diference < appended_size)  ) {
 				//Refill last chunk with null
@@ -192,7 +195,7 @@ public class Chunk {
 				// Create new Chunk
 				this.create(pathFile, fileName2, appended_size);
 
-			} else if ((diference > 0) && (diference > appended_size)  ) {
+			} else if ((diference > 0) && (diference >=appended_size)  ) {
 				// Creating ramdon bytes
 				byte[] bytes = new byte[appended_size];
 				try {

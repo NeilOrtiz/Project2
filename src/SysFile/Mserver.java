@@ -235,27 +235,43 @@ public class Mserver {
         chunk=this.getChunk(fileName, offset);
         int startOffset=offset-BASE*chunk;
 
-        System.out.println("[queryChunk] startOffset: "+startOffset);
+        int largestB=(1+chunk)*BASE;
+
+        int yy=largestB-startOffset;
 
         fileSize=this.getFileSize(fileName);
 
-        //System.out.println("[queryChunk] fileSize: "+fileSize);
+        if (yy<LEN) {
+            System.out.println("[queryChunk] NEXT chunk. yy: "+yy);
+            
+        } else { 
+            System.out.println("[queryChunk] CURRENT chunk. yy: "+yy);
+            System.out.println("[queryChunk] startOffset: "+startOffset);
 
-        if (fileSize>=0) {
-            if ((offset<=fileSize)) {
-                endOffset=startOffset+LEN;
-                if (endOffset>BASE) {
-                    //Partir busqueda en 2 chunks
+            
+
+            //System.out.println("[queryChunk] fileSize: "+fileSize);
+
+            if (fileSize>=0) {
+                if ((offset<=fileSize)) {
+                    endOffset=startOffset+LEN;
+                    if (endOffset>BASE) {
+                        //Partir busqueda en 2 chunks
+                    } else {
+                        info.add(chunk+"-"+startOffset+"-"+endOffset);
+                    }
                 } else {
-                    info.add(chunk+"-"+startOffset+"-"+endOffset);
+                    //[ERROR] offset bigger than file size
+                    info.add("-1");
                 }
             } else {
-                //[ERROR] offset bigger than file size
-                info.add("-1");
+                //info=null;
             }
-        } else {
-            //info=null;
-        }      
+        }
+
+
+
+              
 
         answer=info.toString();   
         return answer;
